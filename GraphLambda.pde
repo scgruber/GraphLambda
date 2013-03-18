@@ -15,6 +15,9 @@ void setup() {
 }
 
 void draw() {
+  background (255);
+  smooth();
+  
   // Draw the lambda expressions
   pushMatrix();
   translate(320, 240);
@@ -32,11 +35,13 @@ class Abstraction {
   PVector pos;
   float rad;
   ArrayList<EntryPointNode> entryPoints;
+  ExitPointNode exitPoint;
   
   Abstraction(PVector inCreatePos, float inCreateRad) {
     this.pos = inCreatePos;
     this.rad = inCreateRad;
     this.entryPoints = new ArrayList();
+    this.exitPoint = new ExitPointNode();
   }
   
   void display() {
@@ -46,6 +51,7 @@ class Abstraction {
     for (int i = entryPoints.size()-1; i >= 0; i--) {
       entryPoints.get(i).display(pos, rad);
     }
+    exitPoint.display(pos, rad);
   }
   
   void addEntryPoint(EntryPointNode inEntryPoint) {
@@ -69,14 +75,20 @@ class Abstraction {
   }
 }
 
-class EntryPointNode {
+class LambdaNode {
+}
+
+class EntryPointNode extends LambdaNode{
   char arg;
   float angle;
   float radius;
+  LambdaNode nextNode;
   
   EntryPointNode(char inArgChar) {
     this.arg = inArgChar;
     this.radius = 10;
+    this.angle = 0;
+    this.nextNode = null;
   }
   
   void setAngle(float inAngle) {
@@ -85,6 +97,14 @@ class EntryPointNode {
   
   float getAngle() {
     return angle;
+  }
+  
+  void setNextNode(LambdaNode inNextNode) {
+    nextNode = inNextNode;
+  }
+  
+  LambdaNode getNextNode() {
+    return nextNode;
   }
   
   void display(PVector inParentCenter, float inParentRadius) {
@@ -99,5 +119,32 @@ class EntryPointNode {
     textSize(16);
     fill(0);
     text(arg, pos.x-4, pos.y+4);
+  }
+}
+
+class BranchNode extends LambdaNode {
+}
+
+class ApplicationNode extends LambdaNode {
+}
+
+class ExitPointNode extends LambdaNode {
+  float angle;
+  float radius;
+  
+  ExitPointNode() {
+    this.angle = HALF_PI;
+    this.radius = 5;
+  }
+  
+  void display(PVector inParentCenter, float inParentRadius) {
+    PVector locVector = new PVector(inParentRadius, 0);
+    locVector.rotate(angle);
+    PVector pos = PVector.add(locVector, inParentCenter);
+    
+    // Actually draw the node
+    stroke(0);
+    fill(0);
+    ellipse(pos.x, pos.y, 2*radius, 2*radius);
   }
 }
