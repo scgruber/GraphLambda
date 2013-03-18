@@ -65,12 +65,27 @@ class Abstraction {
     }
   }
   
+  EntryPointNode findEntryPoint(char inArg) {
+    for (int i = entryPoints.size()-1; i >= 0; i--) {
+      if (entryPoints.get(i).getArg() == inArg) {
+        return entryPoints.get(i);
+      }
+    }
+    
+    // If we didn't find it
+    return null;
+  }
+  
   void parseLambdaString(String inLambdaString) {
     String[] list = split(inLambdaString, '.');
     String argset = list[0].substring(1);
     for (int i = argset.length()-1; i >= 0; i--) {
       char arg = argset.charAt(i);
       a.addEntryPoint(new EntryPointNode(arg));
+    }
+    String fnBody = list[1];
+    if (fnBody.length() == 1) {
+      a.findEntryPoint(fnBody.charAt(0)).setNextNode(exitPoint);
     }
   }
 }
@@ -89,6 +104,10 @@ class EntryPointNode extends LambdaNode{
     this.radius = 10;
     this.angle = 0;
     this.nextNode = null;
+  }
+  
+  char getArg() {
+    return arg;
   }
   
   void setAngle(float inAngle) {
