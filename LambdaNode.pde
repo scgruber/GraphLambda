@@ -1,6 +1,7 @@
 class LambdaNode {
   PVector posCached;
   boolean isDirty;
+  boolean isDrawn;
 }
 
 class EntryPointNode extends LambdaNode{
@@ -38,20 +39,24 @@ class EntryPointNode extends LambdaNode{
   }
   
   void display(PVector inParentCenter, float inParentRadius) {
-    if (isDirty) {
-      PVector locVector = new PVector(-inParentRadius, 0);
-      locVector.rotate(angle);
-      posCached = PVector.add(locVector, inParentCenter);
-      isDirty = false;
+    if (!isDrawn) {
+      if (isDirty) {
+        PVector locVector = new PVector(-inParentRadius, 0);
+        locVector.rotate(angle);
+        posCached = PVector.add(locVector, inParentCenter);
+        isDirty = false;
+      }
+      
+      // Actually draw the node
+      stroke(0);
+      fill(255);
+      ellipse(posCached.x, posCached.y, 2*radius, 2*radius);
+      textSize(16);
+      fill(0);
+      text(arg, posCached.x-4, posCached.y+4);
+      
+      isDrawn = true;
     }
-    
-    // Actually draw the node
-    stroke(0);
-    fill(255);
-    ellipse(posCached.x, posCached.y, 2*radius, 2*radius);
-    textSize(16);
-    fill(0);
-    text(arg, posCached.x-4, posCached.y+4);
   }
 }
 
@@ -73,16 +78,20 @@ class ExitPointNode extends LambdaNode {
   }
   
   void display(PVector inParentCenter, float inParentRadius) {
-    if (isDirty) {
-      PVector locVector = new PVector(inParentRadius, 0);
-      locVector.rotate(angle);
-      posCached = PVector.add(locVector, inParentCenter);
-      isDirty = false;
+    if (!isDrawn) {
+      if (isDirty) {
+        PVector locVector = new PVector(inParentRadius, 0);
+        locVector.rotate(angle);
+        posCached = PVector.add(locVector, inParentCenter);
+        isDirty = false;
+      }
+      
+      // Actually draw the node
+      stroke(0);
+      fill(0);
+      ellipse(posCached.x, posCached.y, 2*radius, 2*radius);
+      
+      isDrawn = true;
     }
-    
-    // Actually draw the node
-    stroke(0);
-    fill(0);
-    ellipse(posCached.x, posCached.y, 2*radius, 2*radius);
   }
 }

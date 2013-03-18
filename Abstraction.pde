@@ -1,17 +1,25 @@
 class Abstraction {
   PVector pos;
   float rad;
+  ArrayList<LambdaNode> allNodes;
   ArrayList<EntryPointNode> entryPoints;
   ExitPointNode exitPoint;
   
   Abstraction(PVector inCreatePos, float inCreateRad) {
     this.pos = inCreatePos;
     this.rad = inCreateRad;
+    this.allNodes = new ArrayList();
     this.entryPoints = new ArrayList();
     this.exitPoint = new ExitPointNode();
+    this.allNodes.add(this.exitPoint);
   }
   
   void display() {
+    // Mark all nodes as undrawn
+    for (int i=allNodes.size()-1; i >= 0; i--) {
+      allNodes.get(i).isDrawn = false;
+    }
+    
     stroke(0);
     fill(255);
     ellipse(pos.x, pos.y, 2*rad, 2*rad);
@@ -22,6 +30,7 @@ class Abstraction {
   }
   
   void addEntryPoint(EntryPointNode inEntryPoint) {
+    allNodes.add(inEntryPoint);
     entryPoints.add(inEntryPoint);
     
     // Relocate all entry points along the curve
