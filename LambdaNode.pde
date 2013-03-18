@@ -2,6 +2,10 @@ class LambdaNode {
   PVector posCached;
   boolean isDirty;
   boolean isDrawn;
+  
+  void display(PVector inParentCenter, float inParentRadius) {
+    return;
+  }
 }
 
 class EntryPointNode extends LambdaNode{
@@ -40,11 +44,18 @@ class EntryPointNode extends LambdaNode{
   
   void display(PVector inParentCenter, float inParentRadius) {
     if (!isDrawn) {
+      isDrawn = true;
+      
       if (isDirty) {
         PVector locVector = new PVector(-inParentRadius, 0);
         locVector.rotate(angle);
         posCached = PVector.add(locVector, inParentCenter);
         isDirty = false;
+      }
+      
+      if (nextNode != null) {
+        line(posCached.x, posCached.y, nextNode.posCached.x, nextNode.posCached.y);
+        nextNode.display(inParentCenter, inParentRadius);
       }
       
       // Actually draw the node
@@ -54,8 +65,6 @@ class EntryPointNode extends LambdaNode{
       textSize(16);
       fill(0);
       text(arg, posCached.x-4, posCached.y+4);
-      
-      isDrawn = true;
     }
   }
 }

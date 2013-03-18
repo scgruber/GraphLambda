@@ -26,7 +26,6 @@ class Abstraction {
     for (int i = entryPoints.size()-1; i >= 0; i--) {
       entryPoints.get(i).display(pos, rad);
     }
-    exitPoint.display(pos, rad);
   }
   
   void addEntryPoint(EntryPointNode inEntryPoint) {
