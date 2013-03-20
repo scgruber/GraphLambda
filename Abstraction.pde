@@ -10,7 +10,7 @@ class Abstraction {
     this.rad = inCreateRad;
     this.allNodes = new ArrayList();
     this.entryPoints = new ArrayList();
-    this.exitPoint = new ExitPointNode();
+    this.exitPoint = new ExitPointNode(pos, rad);
     this.allNodes.add(this.exitPoint);
   }
   
@@ -42,7 +42,7 @@ class Abstraction {
   
   EntryPointNode findEntryPoint(char inArg) {
     for (int i = entryPoints.size()-1; i >= 0; i--) {
-      if (entryPoints.get(i).getArg() == inArg) {
+      if (entryPoints.get(i).getLabel() == inArg) {
         return entryPoints.get(i);
       }
     }
@@ -56,9 +56,9 @@ class Abstraction {
     String argset = list[0].substring(1);
     for (int i = argset.length()-1; i >= 0; i--) {
       char arg = argset.charAt(i);
-      a.addEntryPoint(new EntryPointNode(arg));
+      a.addEntryPoint(new EntryPointNode(arg, pos, rad));
     }
-    LambdaStringTree lcTree = new LambdaStringTree(list[1], a.exitPoint);
+    LambdaStringTree lcTree = new LambdaStringTree(list[1], a.exitPoint, pos);
   }
 }
 
@@ -67,7 +67,7 @@ class LambdaStringTree {
   LambdaStringTree left;
   LambdaStringTree right;
   
-  LambdaStringTree(String inLambdaString, LambdaNode inParentNode) {
+  LambdaStringTree(String inLambdaString, LambdaNode inParentNode, PVector inCenter) {
     this.lambdaString = inLambdaString;
     this.left = null;
     this.right = null;
@@ -77,12 +77,40 @@ class LambdaStringTree {
         entry.setNextNode(inParentNode);
       }
     } else {
-      ApplicationNode appNode = new ApplicationNode();
+      ApplicationNode appNode = new ApplicationNode(inCenter);
       appNode.setNextNode(inParentNode);
-      String leftLambdaString = inLambdaString.substring(0, inLambdaString.length()-2);
-      this.left = new LambdaStringTree(leftLambdaString, appNode);
-      String rightLambdaString = inLambdaString.substring(inLambdaString.length()-1);
-      this.right = new LambdaStringTree(rightLambdaString, appNode);
+      
+      int splitIndex = inLambdaString.length()-1;
+      int parenDepth = 0;
+      String leftLambdaString = "";
+      String rightLambdaString = "";
+      while (splitIndex > 0) {
+        switch(inLambdaString.charAt(splitIndex)) {
+          case ')':
+            parenDepth++;
+          case '(':
+            if (parenDepth == 0) {
+              println("mismatched parentheses");
+              exit();
+            }
+            parenDepth--;
+          case '\\':
+            println("unhandled lambda");
+            exit();
+          default:
+            if (parenDepth == 0) {
+              leftLambdaString = inLambdaString.substring(0,splitIndex-1);
+              rightLambdaString = inLambdaString.substring(splitIndex);
+            }
+        }
+        splitIndex--;
+      }
+      if (splitIndex == 0) {
+        return;
+      }
+      
+      this.left = new LambdaStringTree(leftLambdaString, appNode, inCenter);
+      this.right = new LambdaStringTree(rightLambdaString, appNode, inCenter);
     }
   }
 }
