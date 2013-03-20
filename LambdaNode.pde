@@ -2,9 +2,14 @@ class LambdaNode {
   PVector posCached;
   boolean isDirty;
   boolean isDrawn;
+  LambdaNode nextNode;
   
   void display(PVector inParentCenter, float inParentRadius) {
     return;
+  }
+  
+  void setNextNode(LambdaNode inNextNode) {
+    nextNode = inNextNode;
   }
 }
 
@@ -12,13 +17,13 @@ class EntryPointNode extends LambdaNode{
   char arg;
   float angle;
   float radius;
-  LambdaNode nextNode;
   
   EntryPointNode(char inArgChar) {
     this.arg = inArgChar;
     this.radius = 10;
     this.angle = 0;
     this.nextNode = null;
+    this.posCached = new PVector(0,0);
   }
   
   char getArg() {
@@ -54,6 +59,7 @@ class EntryPointNode extends LambdaNode{
       }
       
       if (nextNode != null) {
+        if (nextNode.posCached == null) println("nextNode.posCached is NULL!");
         line(posCached.x, posCached.y, nextNode.posCached.x, nextNode.posCached.y);
         nextNode.display(inParentCenter, inParentRadius);
       }

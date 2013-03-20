@@ -58,9 +58,31 @@ class Abstraction {
       char arg = argset.charAt(i);
       a.addEntryPoint(new EntryPointNode(arg));
     }
-    String fnBody = list[1];
-    if (fnBody.length() == 1) {
-      a.findEntryPoint(fnBody.charAt(0)).setNextNode(exitPoint);
+    LambdaStringTree lcTree = new LambdaStringTree(list[1], a.exitPoint);
+  }
+}
+
+class LambdaStringTree {
+  String lambdaString;
+  LambdaStringTree left;
+  LambdaStringTree right;
+  
+  LambdaStringTree(String inLambdaString, LambdaNode inParentNode) {
+    this.lambdaString = inLambdaString;
+    this.left = null;
+    this.right = null;
+    if (inLambdaString.length() == 1) {
+      LambdaNode entry = a.findEntryPoint(inLambdaString.charAt(0));
+      if (entry != null) {
+        entry.setNextNode(inParentNode);
+      }
+    } else {
+      ApplicationNode appNode = new ApplicationNode();
+      appNode.setNextNode(inParentNode);
+      String leftLambdaString = inLambdaString.substring(0, inLambdaString.length()-2);
+      this.left = new LambdaStringTree(leftLambdaString, appNode);
+      String rightLambdaString = inLambdaString.substring(inLambdaString.length()-1);
+      this.right = new LambdaStringTree(rightLambdaString, appNode);
     }
   }
 }
