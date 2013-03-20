@@ -3,6 +3,7 @@
 
 Abstraction a;
 String lcString = "\\xy.x";
+PFont cantarell;
 
 void setup() {
   size(640,480);
@@ -12,6 +13,9 @@ void setup() {
   // Build the lambda expression object
   a = new Abstraction(new PVector(0,0), 100.0);
   a.parseLambdaString(lcString);
+  
+  cantarell = loadFont("Cantarell-Bold-48.vlw");
+  textFont(cantarell, 32);
 }
 
 void draw() {
