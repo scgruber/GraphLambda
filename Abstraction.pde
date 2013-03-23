@@ -28,8 +28,12 @@ class Abstraction {
     }
   }
   
+  void addNode(LambdaNode inNode) {
+    allNodes.add(inNode);
+  }
+  
   void addEntryPoint(EntryPointNode inEntryPoint) {
-    allNodes.add(inEntryPoint);
+    addNode(inEntryPoint);
     entryPoints.add(inEntryPoint);
     
     // Relocate all entry points along the curve
@@ -62,55 +66,4 @@ class Abstraction {
   }
 }
 
-class LambdaStringTree {
-  String lambdaString;
-  LambdaStringTree left;
-  LambdaStringTree right;
-  
-  LambdaStringTree(String inLambdaString, LambdaNode inParentNode, PVector inCenter) {
-    this.lambdaString = inLambdaString;
-    this.left = null;
-    this.right = null;
-    if (inLambdaString.length() == 1) {
-      LambdaNode entry = a.findEntryPoint(inLambdaString.charAt(0));
-      if (entry != null) {
-        entry.setNextNode(inParentNode);
-      }
-    } else {
-      ApplicationNode appNode = new ApplicationNode(inCenter);
-      appNode.setNextNode(inParentNode);
-      
-      int splitIndex = inLambdaString.length()-1;
-      int parenDepth = 0;
-      String leftLambdaString = "";
-      String rightLambdaString = "";
-      while (splitIndex > 0) {
-        switch(inLambdaString.charAt(splitIndex)) {
-          case ')':
-            parenDepth++;
-          case '(':
-            if (parenDepth == 0) {
-              println("mismatched parentheses");
-              exit();
-            }
-            parenDepth--;
-          case '\\':
-            println("unhandled lambda");
-            exit();
-          default:
-            if (parenDepth == 0) {
-              leftLambdaString = inLambdaString.substring(0,splitIndex-1);
-              rightLambdaString = inLambdaString.substring(splitIndex);
-            }
-        }
-        splitIndex--;
-      }
-      if (splitIndex == 0) {
-        return;
-      }
-      
-      this.left = new LambdaStringTree(leftLambdaString, appNode, inCenter);
-      this.right = new LambdaStringTree(rightLambdaString, appNode, inCenter);
-    }
-  }
-}
+
