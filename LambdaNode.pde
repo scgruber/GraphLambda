@@ -5,6 +5,7 @@ class LambdaNode {
   boolean isDirty;
   boolean isDrawn;
   color fillColor;
+  LambdaNode originNode;
   LambdaNode nextNode;
   
   void display(PVector inParentCenter, float inParentRadius) {
@@ -31,6 +32,14 @@ class LambdaNode {
         text(label, posCached.x-4, posCached.y+4);
       }
     }
+  }
+  
+  void setOriginNode(LambdaNode inOriginNode) {
+    originNode = inOriginNode;
+  }
+  
+  LambdaNode getOriginNode() {
+    return originNode;
   }
   
   void setNextNode(LambdaNode inNextNode) {

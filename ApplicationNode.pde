@@ -1,5 +1,4 @@
 class ApplicationNode extends LambdaNode {
-  LambdaNode originNode;
   
   ApplicationNode(PVector inInitialPosition) {
     this.label = '\0';
@@ -9,14 +8,6 @@ class ApplicationNode extends LambdaNode {
     this.posCached = inInitialPosition.get();
     this.fillColor = color(0);
     this.isDirty = true;
-  }
-  
-  void setOriginNode(LambdaNode inOriginNode) {
-    originNode = inOriginNode;
-  }
-  
-  LambdaNode getOriginNode() {
-    return originNode;
   }
   
   void updatePosition() {

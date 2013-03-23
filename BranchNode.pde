@@ -1,5 +1,4 @@
 class BranchNode extends LambdaNode {
-  LambdaNode originNode;
   LambdaNode sideNode;
   
   BranchNode(PVector inInitialPosition, LambdaNode inNextNode, LambdaNode inSideNode) {
@@ -11,14 +10,6 @@ class BranchNode extends LambdaNode {
     this.posCached = inInitialPosition.get();
     this.fillColor = color(0);
     this.isDirty = true;
-  }
-  
-  void setOriginNode(LambdaNode inOriginNode) {
-    originNode = inOriginNode;
-  }
-  
-  LambdaNode getOriginNode() {
-    return originNode;
   }
   
   void updatePosition() {
