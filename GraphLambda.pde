@@ -2,7 +2,7 @@
 // Sam Gruber <scgruber@andrew.cmu.edu>
 
 Abstraction a;
-String lcString = "\\xy.yx";
+String lcString = "\\xyz.zxyz";
 PFont cantarell;
 
 void setup() {
