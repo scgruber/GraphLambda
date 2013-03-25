@@ -1,19 +1,21 @@
 class Group {
   // This class produces enclosing circles for Lambda abstractions or groups
   Group parent;
-  PVector center;
-  float radius;
+  BoundingCircle bound;
   ArrayList<Input> inputs;
   
   Group(PVector initialCenter, float initialRadius, Group parentGroup) {
     this.parent = parentGroup;
-    this.center = initialCenter;
-    this.radius = initialRadius;
+    this.bound = new BoundingCircle(initialCenter, initialRadius);
     this.inputs = new ArrayList();
   }
   
   void display() {
-    ellipse(center.x, center.y, 2*radius, 2*radius);
+    ellipse(bound.getX(), bound.getY(), bound.getDiam(), bound.getDiam());
+  }
+  
+  BoundingCircle getBoundingCircle() {
+    return bound.get();
   }
 }
 
@@ -58,4 +60,64 @@ class ControlPoint {
   // This class defines control points for nodes
   PVector pos;
   PVector dir;
+}
+
+class BoundingCircle {
+  // This class defines a generic bounding circle
+  PVector center;
+  float radius;
+  
+  BoundingCircle(PVector inCenter, float inRadius) {
+    this.center = inCenter;
+    this.radius = inRadius;
+  }
+  
+  void set(BoundingCircle inBC) {
+    this.center = inBC.getCenter();
+    this.radius = inBC.getRadius();
+  }
+  
+  BoundingCircle get() {
+    return new BoundingCircle(center, radius);
+  }
+  
+  void setCenter(PVector inCenter) {
+    center = inCenter;
+  }
+  
+  PVector getCenter() {
+    return center.get();
+  }
+  
+  void setX(float inX) {
+    center.x = inX;
+  }
+  
+  float getX() {
+    return center.x;
+  }
+  
+  void setY(float inY) {
+    center.y = inY;
+  }
+  
+  float getY() {
+    return center.y;
+  }
+  
+  void setRadius(float inRadius) {
+    radius = inRadius;
+  }
+  
+  float getRadius() {
+    return radius;
+  }
+  
+  void setDiam(float inDiam) {
+    radius = inDiam/2;
+  }
+  
+  float getDiam() {
+    return radius*2;
+  }
 }
