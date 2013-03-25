@@ -1,25 +1,39 @@
-class Abstraction {
-  Abstraction parent;
-  // This class produces enclosing circles for Lambda abstractions
+class Group {
+  // This class produces enclosing circles for Lambda abstractions or groups
+  Group parent;
+  PVector center;
+  float radius;
+  ArrayList<Input> inputs;
+  
+  Group(PVector initialCenter, float initialRadius, Group parentGroup) {
+    this.parent = parentGroup;
+    this.center = initialCenter;
+    this.radius = initialRadius;
+    this.inputs = new ArrayList();
+  }
+  
+  void display() {
+    ellipse(center.x, center.y, 2*radius, 2*radius);
+  }
 }
 
 class Input {
   // This class produces inputs on abstractions
-  Abstraction parent;
+  Group parent;
   Merge exterior;
   Merge interior;
 }
 
 class Output {
   // This class produces outputs of abstractions
-  Abstraction parent;
+  Group parent;
   Merge interior;
   Merge exterior;
 }
 
 class Branch {
   // This class creates branches of identical elements
-  Abstraction parent;
+  Group parent;
   Merge source;
   Merge left;
   Merge right;
@@ -27,7 +41,7 @@ class Branch {
 
 class Application {
   // This class creates applications of objects to functions
-  Abstraction parent;
+  Group parent;
   Merge fn;
   Merge arg;
   Merge result;
@@ -35,7 +49,7 @@ class Application {
 
 class Merge {
   // This class defines a connection between two other nodes
-  Abstraction parent;
+  Group parent;
   ControlPoint start;
   ControlPoint end;
 }
