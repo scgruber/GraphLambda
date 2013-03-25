@@ -56,13 +56,11 @@ class Abstraction {
   }
   
   void parseLambdaString(String inLambdaString) {
-    String[] list = split(inLambdaString, '.');
-    String argset = list[0].substring(1);
-    for (int i = argset.length()-1; i >= 0; i--) {
-      char arg = argset.charAt(i);
-      a.addEntryPoint(new EntryPointNode(arg, pos, rad));
-    }
-    LambdaStringTree lcTree = new LambdaStringTree(list[1], a.exitPoint, pos);
+    print("Parsing Lambda String: ");
+    println(inLambdaString);
+    TokenString ts = new TokenString(inLambdaString);
+    print("Reconstructed string: ");
+    println(ts.render());
   }
 }
 
