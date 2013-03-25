@@ -1,8 +1,9 @@
 // GraphLambda
 // Sam Gruber <scgruber@andrew.cmu.edu>
 
-Abstraction a;
-String lcString = "(\\xyz.xz(yz))";
+Abstraction root;
+String lcString = "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))"; // Predecessor function
+TokenString lambdaTokens;
 PFont cantarell;
 
 void setup() {
@@ -11,9 +12,7 @@ void setup() {
   strokeWeight(2);
   
   // Build the lambda expression object
-  a = new Abstraction(new PVector(0,0), 100.0);
-  a.parseLambdaString(lcString);
-  
+  TokenString ts = new TokenString(lcString);
   cantarell = loadFont("Cantarell-Bold-48.vlw");
   textFont(cantarell, 32);
 }
@@ -25,7 +24,6 @@ void draw() {
   // Draw the lambda expressions
   pushMatrix();
   translate(320, 240);
-  a.display();
   
   popMatrix();
   
