@@ -76,4 +76,12 @@ class TokenString {
     }
     return out;
   }
+  
+  Group produceDrawing(Group parent) {
+    Group g = new Group(new PVector(0,0), 100, parent);
+    
+    // TODO: interesting stuff
+    
+    return g;
+  }
 }
