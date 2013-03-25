@@ -59,20 +59,20 @@ class TokenString {
     }
   }
   
-  String render() {
+  String toString() {
     String out = "";
     if (child != null) {
       out += "(";
       if (val != "") { // Abstraction
         out += "\\" + val + ".";
       }
-      out += child.render();
+      out += child.toString();
       out += ")";
     } else {
       out += val;
     }
     if (next != null) {
-      out += next.render();
+      out += next.toString();
     }
     return out;
   }
