@@ -5,6 +5,8 @@ class TokenString {
   
   TokenString(String inLC) {
     this.val = "";
+    this.next = null;
+    this.child = null;
     if (inLC.length() == 0) {
       return;
     } else if (inLC.charAt(0) == '(') {
@@ -77,7 +79,14 @@ class TokenString {
     return out;
   }
   
+  // This function should only be called on an abstraction
   Group produceDrawing(Group parent) {
+    
+    if (this.child == null || this.val == "") {
+      println("Error: invalid target for produceDrawing call");
+      exit();
+    }
+    
     Group g = new Group(new PVector(0,0), 100, parent);
     
     // TODO: interesting stuff
