@@ -18,6 +18,14 @@ class Group {
     inputs.add(inInput);
   }
   
+  Input getInput(char inArg) {
+    for (int i = inputs.size()-1; i >= 0; i--) {
+      if (inputs.get(i).getArg() == inArg) return inputs.get(i);
+    }
+    if (parent != null) return parent.getInput(inArg);
+    else return null;
+  }
+  
   BoundingCircle getBoundingCircle() {
     return bound.get();
   }
@@ -28,16 +36,31 @@ class Input {
   Group parent;
   Merge exterior;
   Merge interior;
+  Group assignedGroup;
   char arg;
-  PVector pos;
+  BoundingCircle bound;
   
   Input(char inArg) {
     this.arg = inArg;
-    this.pos = new PVector(0,0);
+    this.bound = new BoundingCircle(new PVector(0,0),10);
   }
   
   void display() {
-    ellipse(pos.x, pos.y, 10, 10);
+    ellipse(bound.getX(), bound.getY(), bound.getDiam(), bound.getDiam());
+  }
+  
+  void assignArgument(Group inAssignedGroup) {
+    assignedGroup = inAssignedGroup;
+    bound = inAssignedGroup.getBoundingCircle();
+    bound.alterRadius(10);
+  }
+  
+  Group getArgument() {
+    return assignedGroup;
+  }
+  
+  char getArg() {
+    return arg;
   }
 }
 
@@ -126,6 +149,10 @@ class BoundingCircle {
   
   float getRadius() {
     return radius;
+  }
+  
+  void alterRadius(float change) {
+    radius += change;
   }
   
   void setDiam(float inDiam) {
