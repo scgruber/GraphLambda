@@ -89,6 +89,12 @@ class TokenString {
     
     Group g = new Group(new PVector(0,0), 100, parent);
     
+    // Add inputs to the abstraction group
+    for (int i=0; i<val.length(); i++) {
+      Input in = new Input(val.charAt(i));
+      g.addInput(in);
+    }
+    
     // TODO: interesting stuff
     
     return g;

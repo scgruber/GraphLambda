@@ -14,6 +14,10 @@ class Group {
     ellipse(bound.getX(), bound.getY(), bound.getDiam(), bound.getDiam());
   }
   
+  void addInput(Input inInput) {
+    inputs.add(inInput);
+  }
+  
   BoundingCircle getBoundingCircle() {
     return bound.get();
   }
@@ -24,6 +28,17 @@ class Input {
   Group parent;
   Merge exterior;
   Merge interior;
+  char arg;
+  PVector pos;
+  
+  Input(char inArg) {
+    this.arg = inArg;
+    this.pos = new PVector(0,0);
+  }
+  
+  void display() {
+    ellipse(pos.x, pos.y, 10, 10);
+  }
 }
 
 class Output {
