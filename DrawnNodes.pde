@@ -4,22 +4,25 @@ class Group {
   BoundingCircle bound;
   ArrayList<Input> inputs;
   float maxInputRadius;
+  Output output;
   
   Group(PVector initialCenter, float initialRadius, Group parentGroup) {
     this.parent = parentGroup;
     this.bound = new BoundingCircle(initialCenter, initialRadius);
     this.inputs = new ArrayList();
     this.maxInputRadius = 0;
+    this.output = new Output(this, initialRadius);
   }
   
   void display() {
     pushMatrix();
     translate(bound.getX(), bound.getY());
     
-    ellipse(bound.getX(), bound.getY(), bound.getDiam(), bound.getDiam());
+    ellipse(0, 0, bound.getDiam(), bound.getDiam());
     for (int i=inputs.size()-1; i >= 0; i--) {
       inputs.get(i).display();
     }
+    output.display();
     
     popMatrix();
   }
@@ -37,6 +40,8 @@ class Group {
       inputs.get(i).bound.setCenter(new PVector(bound.getRadius() * cos(inc*(i+1)),
         bound.getRadius() * -sin(inc*(i+1))));
     }
+    
+    output.setParentRadius(bound.getRadius());
   }
   
   Input getInput(char inArg) {
@@ -104,6 +109,21 @@ class Output {
   Group parent;
   Merge interior;
   Merge exterior;
+  BoundingCircle bound;
+  
+  Output(Group inParent, float inParentRadius) {
+    this.parent = inParent;
+    this.bound = new BoundingCircle(new PVector(0,inParentRadius), 5);
+  }
+  
+  void display() {
+    fill(0);
+    ellipse(bound.getX(), bound.getY(), bound.getDiam(), bound.getDiam());
+  }
+  
+  void setParentRadius(float inParentRadius) {
+    bound.setY(inParentRadius);
+  }
 }
 
 class Branch {
