@@ -8,7 +8,8 @@ class TokenString {
     this.next = null;
     this.child = null;
     if (inLC.length() == 0) {
-      return;
+      println("Parsing bug in TokenString constructor");
+      exit();
     } else if (inLC.charAt(0) == '(') {
       if (inLC.charAt(1) == '\\') { // Lambda abstraction
         int i = 2;
@@ -26,13 +27,17 @@ class TokenString {
         }
         int finishIndex = i;
         String childLambdaString = inLC.substring(startIndex, finishIndex-1);
-        print("Parsing Child: ");
-        println(childLambdaString);
-        this.child = new TokenString(childLambdaString);
+        if (childLambdaString.length() > 0) {
+          print("Parsing Child: ");
+          println(childLambdaString);
+          this.child = new TokenString(childLambdaString);
+        }
         String nextLambdaString = inLC.substring(finishIndex);
-        print("Parsing Next: ");
-        println(nextLambdaString);
-        this.next = new TokenString(nextLambdaString);
+        if (nextLambdaString.length() > 0) {
+          print("Parsing Next: ");
+          println(nextLambdaString);
+          this.next = new TokenString(nextLambdaString);
+        }
       } else { // Group
         int startIndex = 1;
         int i = 1;
@@ -44,20 +49,26 @@ class TokenString {
         }
         int finishIndex = i;
         String childLambdaString = inLC.substring(startIndex, finishIndex-1);
-        print("Parsing Child: ");
-        println(childLambdaString);
-        this.child = new TokenString(childLambdaString);
+        if (childLambdaString.length() > 0) {
+          print("Parsing Child: ");
+          println(childLambdaString);
+          this.child = new TokenString(childLambdaString);
+        }
         String nextLambdaString = inLC.substring(finishIndex);
-        print("Parsing Next: ");
-        println(nextLambdaString);
-        this.next = new TokenString(nextLambdaString);
+        if (nextLambdaString.length() > 0) {
+          print("Parsing Next: ");
+          println(nextLambdaString);
+          this.next = new TokenString(nextLambdaString);
+        }
       }
     } else { // Normal token
       this.val = "" + inLC.charAt(0);
       String nextLambdaString = inLC.substring(1);
+      if (nextLambdaString.length() > 0) {
         print("Parsing Next: ");
         println(nextLambdaString);
         this.next = new TokenString(nextLambdaString);
+      }
     }
   }
   
@@ -87,7 +98,7 @@ class TokenString {
       exit();
     }
     
-    Group g = new Group(new PVector(0,0), 100, parent);
+    Group g = new Group(new PVector(0,0), 10, parent);
     TokenString nextToken = next;
     
     // Add inputs to the abstraction group
@@ -95,6 +106,7 @@ class TokenString {
       Input in = new Input(val.charAt(i));
       if (nextToken != null) {
         in.assignArgument(nextToken.produceDrawing(parent));
+        nextToken = nextToken.next;
       }
       g.addInput(in);
     }
