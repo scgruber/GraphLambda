@@ -11,11 +11,25 @@ class Group {
   }
   
   void display() {
+    pushMatrix();
+    translate(bound.getX(), bound.getY());
+    
     ellipse(bound.getX(), bound.getY(), bound.getDiam(), bound.getDiam());
+    for (int i=inputs.size()-1; i >= 0; i--) {
+      inputs.get(i).display();
+    }
+    
+    popMatrix();
   }
   
   void addInput(Input inInput) {
     inputs.add(inInput);
+    
+    float inc = PI/(inputs.size()+1);
+    for (int i = inputs.size()-1; i >= 0; i--) {
+      inputs.get(i).bound.setCenter(new PVector(bound.getRadius() * cos(inc*(i+1)),
+        bound.getRadius() * sin(inc*(i+1))));
+    }
   }
   
   Input getInput(char inArg) {
@@ -46,7 +60,15 @@ class Input {
   }
   
   void display() {
-    ellipse(bound.getX(), bound.getY(), bound.getDiam(), bound.getDiam());
+    pushMatrix();
+    translate(bound.getX(), bound.getY());
+    
+    ellipse(0, 0, bound.getDiam(), bound.getDiam());
+    if (assignedGroup != null) {
+      assignedGroup.display();
+    }
+    
+    popMatrix();
   }
   
   void assignArgument(Group inAssignedGroup) {
