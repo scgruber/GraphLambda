@@ -28,7 +28,7 @@ class Group {
     float inc = PI/(inputs.size()+1);
     for (int i = inputs.size()-1; i >= 0; i--) {
       inputs.get(i).bound.setCenter(new PVector(bound.getRadius() * cos(inc*(i+1)),
-        bound.getRadius() * sin(inc*(i+1))));
+        bound.getRadius() * -sin(inc*(i+1))));
     }
   }
   
