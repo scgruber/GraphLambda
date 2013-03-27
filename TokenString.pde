@@ -79,7 +79,7 @@ class TokenString {
     return out;
   }
   
-  // This function should only be called on an abstraction
+  // This function should only be called on a group
   Group produceDrawing(Group parent) {
     
     if (this.child == null || this.val == "") {
