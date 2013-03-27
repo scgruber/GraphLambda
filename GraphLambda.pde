@@ -7,7 +7,7 @@ TokenString lambdaTokens;
 PFont cantarell;
 
 void setup() {
-  size(640,480);
+  size(800,600);
   background(255);
   strokeWeight(2);
   
@@ -24,7 +24,7 @@ void draw() {
   
   // Draw the lambda expressions
   pushMatrix();
-  translate(320, 240);
+  translate(width/2, height/2);
   
   fill(255);
   stroke(0);
