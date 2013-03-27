@@ -25,7 +25,16 @@ class Group {
   void addInput(Input inInput) {
     inputs.add(inInput);
     
+    // We know there is at least one input because we just added one
+    float curMax = inputs.get(0).bound.getDiam();
+    for (int i = inputs.size()-1; i > 0 /* checking 0 redundant */; i--) {
+      curMax = max(curMax, inputs.get(i).bound.getDiam());
+    }
+    
     float inc = PI/(inputs.size()+1);
+    
+    bound.setRadius((curMax*1.25)/inc);
+    
     for (int i = inputs.size()-1; i >= 0; i--) {
       inputs.get(i).bound.setCenter(new PVector(bound.getRadius() * cos(inc*(i+1)),
         bound.getRadius() * -sin(inc*(i+1))));
