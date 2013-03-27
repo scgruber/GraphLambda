@@ -2,7 +2,7 @@
 // Sam Gruber <scgruber@andrew.cmu.edu>
 
 Group root;
-String lcString = "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))"; // Predecessor function
+String lcString = "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))(\\fx.f(fx))"; // Predecessor function applied to 2
 TokenString lambdaTokens;
 PFont cantarell;
 
