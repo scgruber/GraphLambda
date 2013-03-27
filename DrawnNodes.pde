@@ -3,11 +3,13 @@ class Group {
   Group parent;
   BoundingCircle bound;
   ArrayList<Input> inputs;
+  float maxInputRadius;
   
   Group(PVector initialCenter, float initialRadius, Group parentGroup) {
     this.parent = parentGroup;
     this.bound = new BoundingCircle(initialCenter, initialRadius);
     this.inputs = new ArrayList();
+    this.maxInputRadius = 0;
   }
   
   void display() {
@@ -24,16 +26,12 @@ class Group {
   
   void addInput(Input inInput) {
     inputs.add(inInput);
-    
-    // We know there is at least one input because we just added one
-    float curMax = inputs.get(0).bound.getDiam();
-    for (int i = inputs.size()-1; i > 0 /* checking 0 redundant */; i--) {
-      curMax = max(curMax, inputs.get(i).bound.getDiam());
-    }
-    
     float inc = PI/(inputs.size()+1);
     
-    bound.setRadius((curMax*1.25)/inc);
+    if (inInput.bound.getRadius() > maxInputRadius) {
+      maxInputRadius = inInput.bound.getRadius();
+      bound.setRadius((maxInputRadius*5)/inc);
+    }
     
     for (int i = inputs.size()-1; i >= 0; i--) {
       inputs.get(i).bound.setCenter(new PVector(bound.getRadius() * cos(inc*(i+1)),
@@ -51,6 +49,12 @@ class Group {
   
   BoundingCircle getBoundingCircle() {
     return bound.get();
+  }
+  
+  BoundingCircle getOuterBound() {
+    BoundingCircle outer = bound.get();
+    outer.alterRadius(maxInputRadius);
+    return outer;
   }
 }
 
@@ -82,7 +86,7 @@ class Input {
   
   void assignArgument(Group inAssignedGroup) {
     assignedGroup = inAssignedGroup;
-    bound = inAssignedGroup.getBoundingCircle();
+    bound = inAssignedGroup.getOuterBound();
     bound.alterRadius(10);
   }
   
