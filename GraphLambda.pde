@@ -2,7 +2,7 @@
 // Sam Gruber <scgruber@andrew.cmu.edu>
 
 Group root;
-String lcString = "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))(\\fx.f(fx))"; // Predecessor function applied to 2
+String lcString = "";
 TokenString lambdaTokens;
 PFont cantarell;
 
@@ -12,8 +12,12 @@ void setup() {
   strokeWeight(2);
   
   // Build the lambda expression object
-  lambdaTokens = new TokenString(lcString);
-  root = lambdaTokens.produceDrawing(null);
+  try {
+    lambdaTokens = new TokenString(lcString);
+    root = lambdaTokens.produceDrawing(null);
+  } catch (TokenStringException e) {
+    lambdaTokens = null;
+  }
   cantarell = loadFont("Cantarell-Bold-48.vlw");
   textFont(cantarell, 32);
 }
@@ -30,7 +34,9 @@ void draw() {
   stroke(0);
   strokeWeight(2);
   
-  root.display();
+  if (root != null) {
+    root.display();
+  }
   
   popMatrix();
   
@@ -41,9 +47,17 @@ void draw() {
 }
 
 void keyTyped() {
-  if ('a' <= key && key <= 'z') {
+  if (('a' <= key && key <= 'z') || key == '\\' || key == '(' || key == ')' || key == '.') {
     lcString += key;
   } else if (key == BACKSPACE) {
     lcString = lcString.substring(0,lcString.length()-1);
+  }
+  
+  // Build the new lambda expression object
+  try {
+    lambdaTokens = new TokenString(lcString);
+    root = lambdaTokens.produceDrawing(null);
+  } catch (TokenStringException e) {
+    lambdaTokens = null;
   }
 }

@@ -3,24 +3,36 @@ class TokenString {
   TokenString next;
   TokenString child;
   
-  TokenString(String inLC) {
+  TokenString(String inLC) throws TokenStringException {
     this.val = "";
     this.next = null;
     this.child = null;
     if (inLC.length() == 0) {
-      println("Parsing bug in TokenString constructor");
-      exit();
-    } else if (inLC.charAt(0) == '(') {
+      throw new TokenStringException();
+    }
+    if (inLC.charAt(0) == '(') {
+      if (inLC.length() < 2) {
+        throw new TokenStringException();
+      }
       if (inLC.charAt(1) == '\\') { // Lambda abstraction
         int i = 2;
         this.val = "";
+        if (i >= inLC.length()) {
+          throw new TokenStringException();
+        }
         while (inLC.charAt(i) != '.') {
           this.val += inLC.charAt(i);
           i++;
+          if (i == inLC.length()) {
+            throw new TokenStringException();
+          }
         }
         int startIndex = ++i;
         int depth = 1;
         while (depth > 0) {
+          if (i == inLC.length()) {
+            throw new TokenStringException();
+          }
           if (inLC.charAt(i) == '(') depth++;
           else if (inLC.charAt(i) == ')') depth--;
           i++;
