@@ -126,10 +126,26 @@ class TokenString {
       inContainerGroup.addInput(in);
     }
     
-    if (child.child == null) {
-      // Variable node
-    } else {
-      // Group node
+    TokenString nextChild = child;
+    Node appliesTo = null;
+    while (nextChild != null) {
+      if (nextChild.child == null) {
+        // Variable node
+        println("Create application for "+nextChild.val);
+        Input origin = inContainerGroup.getInput(nextChild.val.charAt(0));
+        Node output;
+        if (appliesTo != null) {
+          output = appliesTo;
+        } else {
+          output = inContainerGroup.output;
+        }
+        inContainerGroup.makeApplication(origin, null, output);
+        appliesTo = inContainerGroup.interior.get(inContainerGroup.interior.size()-1);
+        nextChild = nextChild.next;
+      } else {
+        // Group node
+        break;
+      }
     }
     
     return nextToken;

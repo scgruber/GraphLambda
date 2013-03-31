@@ -23,11 +23,16 @@ class Node {
   Node getOut() {
     return out;
   }
+  
+  void display() {
+    return;
+  }
 }
 
 class Group extends Node {
   // This class produces enclosing circles for Lambda abstractions or groups
   ArrayList<Input> inputs;
+  ArrayList<Node> interior;
   float maxInputRadius;
   Output output;
   
@@ -35,6 +40,7 @@ class Group extends Node {
     this.parent = parentGroup;
     this.bound = new BoundingCircle(initialCenter, initialRadius);
     this.inputs = new ArrayList();
+    this.interior = new ArrayList();
     this.maxInputRadius = 0;
     this.output = new Output(this, initialRadius);
   }
@@ -44,6 +50,9 @@ class Group extends Node {
     translate(bound.getX(), bound.getY());
     
     ellipse(0, 0, bound.getDiam(), bound.getDiam());
+    for (int i=interior.size()-1; i >= 0; i--) {
+      interior.get(i).display();
+    }
     for (int i=inputs.size()-1; i >= 0; i--) {
       inputs.get(i).display();
     }
@@ -81,6 +90,16 @@ class Group extends Node {
     BoundingCircle outer = bound.get();
     outer.alterRadius(maxInputRadius);
     return outer;
+  }
+  
+  void makeApplication(Node in, Node app, Node out) {
+    Application appNode = new Application(this);
+    
+    appNode.setIn(in);
+    appNode.setOut(out);
+    appNode.setApp(app);
+    
+    interior.add(appNode);
   }
 }
 
@@ -172,6 +191,25 @@ class Application extends Node{
   
   Node getApp() {
     return app;
+  }
+  
+  void display() {
+    this.updatePosition();
+    if (in != null) {
+      line(bound.getX(), bound.getY(), in.bound.getX(), in.bound.getY());
+    }
+    if (app != null) {
+      line(bound.getX(), bound.getY(), app.bound.getX(), app.bound.getY());
+    }
+    if (out != null) {
+      line(bound.getX(), bound.getY(), out.bound.getX(), out.bound.getY());
+    }
+  }
+  
+  void updatePosition() {
+    if (in != null && out != null) {
+      bound.setCenter(PVector.lerp(in.bound.getCenter(), out.bound.getCenter(), 0.5));
+    }
   }
 }
 
