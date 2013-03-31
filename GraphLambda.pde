@@ -39,3 +39,11 @@ void draw() {
   fill(0,102,153);
   text(lcString, 10, 30);
 }
+
+void keyTyped() {
+  if ('a' <= key && key <= 'z') {
+    lcString += key;
+  } else if (key == BACKSPACE) {
+    lcString = lcString.substring(0,lcString.length()-1);
+  }
+}
