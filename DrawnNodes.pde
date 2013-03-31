@@ -141,10 +141,38 @@ class Output extends Node{
 
 class Branch extends Node{
   // This class creates branches of identical elements
+  Node branch;
+  
+  Branch(Group inParent) {
+    this.parent = inParent;
+    this.bound = new BoundingCircle(new PVector(0,0), 10);
+  }
+  
+  void setBranch(Node newBranch) {
+    branch = newBranch;
+  }
+  
+  Node getBranch() {
+    return branch;
+  }
 }
 
 class Application extends Node{
   // This class creates applications of objects to functions
+  Node app;
+  
+  Application(Group inParent) {
+    this.parent = inParent;
+    this.bound = new BoundingCircle(new PVector(0,0), 10);
+  }
+  
+  void setApp(Node newApp) {
+    app = newApp;
+  }
+  
+  Node getApp() {
+    return app;
+  }
 }
 
 class BoundingCircle {
