@@ -2,10 +2,11 @@
 // Sam Gruber <scgruber@andrew.cmu.edu>
 
 Group root;
-String lcString = "(\\xyz.x(yz))";
+String lcString = "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))";
 TokenString lambdaTokens;
 PFont cantarell;
 float drawingScale;
+ArrayList<Group> groups;
 
 void setup() {
   size(800,600);
@@ -14,9 +15,11 @@ void setup() {
   
   // Build the lambda expression object
   try {
+    groups = new ArrayList();
     lambdaTokens = new TokenString(lcString);
     root = new Group(new PVector(0,0), 10, null);
     lambdaTokens.produceDrawing(root);
+    groups.add(root);
   } catch (TokenStringException e) {
     lambdaTokens = null;
   }
@@ -37,7 +40,7 @@ void draw() {
   
   if (root != null) {
     // Determine appropriate window scale
-    drawingScale = height/(root.getBoundingCircle().getDiam());
+    drawingScale = (height-100)/(root.getBoundingCircle().getDiam());
     pushMatrix();
     scale(drawingScale);
     strokeWeight(2/drawingScale);

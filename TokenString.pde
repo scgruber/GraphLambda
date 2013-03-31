@@ -3,6 +3,12 @@ class TokenString {
   TokenString next;
   TokenString child;
   
+  TokenString() {
+    this.val = "";
+    this.next = null;
+    this.child = null;
+  }
+  
   TokenString(String inLC) throws TokenStringException {
     this.val = "";
     this.next = null;
@@ -124,7 +130,9 @@ class TokenString {
       Input in = new Input(val.charAt(i));
       if (nextToken != null) {
         Group arg = new Group(new PVector(0,0), 10, inContainerGroup.parent);
-        nextToken = nextToken.produceDrawing(arg);
+        groups.add(arg);
+        nextToken.makeSingleton().produceDrawing(arg);
+        nextToken = nextToken.next;
         in.assignArgument(arg);
       }
       inContainerGroup.addInput(in);
@@ -150,6 +158,7 @@ class TokenString {
         // Group node
         println("Create group with vars "+nextChild.val);
         Group grp = new Group(new PVector(0,0), 10, inContainerGroup);
+        groups.add(grp);
         nextChild = nextChild.produceDrawing(grp);
         Node output;
         if (appliesTo != null) {
@@ -163,6 +172,15 @@ class TokenString {
     }
     
     return nextToken;
+  }
+  
+  TokenString makeSingleton() {
+    TokenString out = new TokenString();
+    out.val = val;
+    out.next = null;
+    out.child = child;
+    
+    return out;
   }
 }
 
