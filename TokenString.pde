@@ -116,3 +116,6 @@ class TokenString {
     return g;
   }
 }
+
+class TokenStringException extends Exception {
+}
