@@ -58,7 +58,11 @@ class Group extends Node {
     for (int i=inputs.size()-1; i >= 0; i--) {
       inputs.get(i).display();
     }
+    if (out != null) {
+      line(output.bound.getX(), output.bound.getY(), out.bound.getX(), out.bound.getY());
+    }
     output.display();
+
     
     popMatrix();
   }
@@ -88,7 +92,7 @@ class Group extends Node {
     else return null;
   }
   
-  BoundingCircle getOuterBound() {
+  BoundingCircle getBoundingCircle() {
     BoundingCircle outer = bound.get();
     outer.alterRadius(maxInputRadius);
     return outer;
@@ -137,7 +141,7 @@ class Input extends Node{
   
   void assignArgument(Group inAssignedGroup) {
     assignedGroup = inAssignedGroup;
-    bound = inAssignedGroup.getOuterBound();
+    bound = inAssignedGroup.getBoundingCircle();
     bound.alterRadius(10);
   }
   

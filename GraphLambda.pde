@@ -37,7 +37,7 @@ void draw() {
   
   if (root != null) {
     // Determine appropriate window scale
-    drawingScale = height/(root.getOuterBound().getDiam());
+    drawingScale = height/(root.getBoundingCircle().getDiam());
     pushMatrix();
     scale(drawingScale);
     strokeWeight(2/drawingScale);
