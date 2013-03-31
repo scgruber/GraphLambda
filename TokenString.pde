@@ -60,6 +60,10 @@ class TokenString {
         int i = 1;
         int depth = 1;
         while (depth > 0) {
+          if (i == inLC.length()) {
+            println("Mismatched parentheses");
+            throw new TokenStringException();
+          }
           if (inLC.charAt(i) == '(') depth++;
           else if (inLC.charAt(i) == ')') depth--;
           i++;
