@@ -63,14 +63,17 @@ class Group {
   }
 }
 
-class Input {
-  // This class produces inputs on abstractions
+class Node {
   Group parent;
-  Merge exterior;
-  Merge interior;
+  Node in;
+  Node out;
+  BoundingCircle bound;
+}
+
+class Input extends Node{
+  // This class produces inputs on abstractions
   Group assignedGroup;
   char arg;
-  BoundingCircle bound;
   
   Input(char inArg) {
     this.arg = inArg;
@@ -104,12 +107,8 @@ class Input {
   }
 }
 
-class Output {
+class Output extends Node{
   // This class produces outputs of abstractions
-  Group parent;
-  Merge interior;
-  Merge exterior;
-  BoundingCircle bound;
   
   Output(Group inParent, float inParentRadius) {
     this.parent = inParent;
@@ -126,33 +125,12 @@ class Output {
   }
 }
 
-class Branch {
+class Branch extends Node{
   // This class creates branches of identical elements
-  Group parent;
-  Merge source;
-  Merge left;
-  Merge right;
 }
 
-class Application {
+class Application extends Node{
   // This class creates applications of objects to functions
-  Group parent;
-  Merge fn;
-  Merge arg;
-  Merge result;
-}
-
-class Merge {
-  // This class defines a connection between two other nodes
-  Group parent;
-  ControlPoint start;
-  ControlPoint end;
-}
-
-class ControlPoint {
-  // This class defines control points for nodes
-  PVector pos;
-  PVector dir;
 }
 
 class BoundingCircle {
