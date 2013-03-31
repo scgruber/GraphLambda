@@ -7,6 +7,22 @@ class Node {
   BoundingCircle getBoundingCircle() {
     return bound.get();
   }
+  
+  void setIn(Node newIn) {
+    in = newIn;
+  }
+  
+  Node getIn() {
+    return in;
+  }
+  
+  void setOut(Node newOut) {
+    out = newOut;
+  }
+  
+  Node getOut() {
+    return out;
+  }
 }
 
 class Group extends Node {
