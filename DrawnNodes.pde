@@ -1,7 +1,16 @@
-class Group {
-  // This class produces enclosing circles for Lambda abstractions or groups
+class Node {
   Group parent;
+  Node in;
+  Node out;
   BoundingCircle bound;
+  
+  BoundingCircle getBoundingCircle() {
+    return bound.get();
+  }
+}
+
+class Group extends Node {
+  // This class produces enclosing circles for Lambda abstractions or groups
   ArrayList<Input> inputs;
   float maxInputRadius;
   Output output;
@@ -52,22 +61,11 @@ class Group {
     else return null;
   }
   
-  BoundingCircle getBoundingCircle() {
-    return bound.get();
-  }
-  
   BoundingCircle getOuterBound() {
     BoundingCircle outer = bound.get();
     outer.alterRadius(maxInputRadius);
     return outer;
   }
-}
-
-class Node {
-  Group parent;
-  Node in;
-  Node out;
-  BoundingCircle bound;
 }
 
 class Input extends Node{
