@@ -123,7 +123,7 @@ class TokenString {
     for (int i=0; i<val.length(); i++) {
       Input in = new Input(val.charAt(i));
       if (nextToken != null) {
-        Group arg = new Group(new PVector(0,0), 0, inContainerGroup.parent);
+        Group arg = new Group(new PVector(0,0), 10, inContainerGroup.parent);
         nextToken = nextToken.produceDrawing(arg);
         in.assignArgument(arg);
       }
@@ -148,6 +148,16 @@ class TokenString {
         nextChild = nextChild.next;
       } else {
         // Group node
+        println("Create group with vars "+nextChild.val);
+        Group grp = new Group(new PVector(0,0), 10, inContainerGroup);
+        nextChild = nextChild.produceDrawing(grp);
+        Node output;
+        if (appliesTo != null) {
+          output = appliesTo;
+        } else {
+          output = inContainerGroup.output;
+        }
+        inContainerGroup.addGroup(grp, output);
         break;
       }
     }

@@ -49,6 +49,8 @@ class Group extends Node {
     pushMatrix();
     translate(bound.getX(), bound.getY());
     
+    fill(255);
+    stroke(0);    
     ellipse(0, 0, bound.getDiam(), bound.getDiam());
     for (int i=interior.size()-1; i >= 0; i--) {
       interior.get(i).display();
@@ -101,6 +103,12 @@ class Group extends Node {
     
     interior.add(appNode);
   }
+  
+  void addGroup(Group grp, Node out) {
+    grp.setOut(out);
+    
+    interior.add(grp);
+  }
 }
 
 class Input extends Node{
@@ -117,6 +125,8 @@ class Input extends Node{
     pushMatrix();
     translate(bound.getX(), bound.getY());
     
+    fill(255);
+    stroke(0);
     ellipse(0, 0, bound.getDiam(), bound.getDiam());
     if (assignedGroup != null) {
       assignedGroup.display();
