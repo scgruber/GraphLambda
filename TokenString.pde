@@ -8,22 +8,26 @@ class TokenString {
     this.next = null;
     this.child = null;
     if (inLC.length() == 0) {
+      println("Passed empty Lambda string");
       throw new TokenStringException();
     }
     if (inLC.charAt(0) == '(') {
       if (inLC.length() < 2) {
+        println("Lambda string ends with '('");
         throw new TokenStringException();
       }
       if (inLC.charAt(1) == '\\') { // Lambda abstraction
         int i = 2;
         this.val = "";
         if (i >= inLC.length()) {
+          println("Abstraction has no arguments");
           throw new TokenStringException();
         }
         while (inLC.charAt(i) != '.') {
           this.val += inLC.charAt(i);
           i++;
           if (i == inLC.length()) {
+            println("Abstraction has no dot");
             throw new TokenStringException();
           }
         }
@@ -31,6 +35,7 @@ class TokenString {
         int depth = 1;
         while (depth > 0) {
           if (i == inLC.length()) {
+            println("Mismatched parentheses");
             throw new TokenStringException();
           }
           if (inLC.charAt(i) == '(') depth++;
