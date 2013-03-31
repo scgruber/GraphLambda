@@ -14,7 +14,8 @@ void setup() {
   // Build the lambda expression object
   try {
     lambdaTokens = new TokenString(lcString);
-    root = lambdaTokens.produceDrawing(null);
+    root = new Group(new PVector(0,0), 10, null);
+    lambdaTokens.produceDrawing(root);
   } catch (TokenStringException e) {
     lambdaTokens = null;
   }
@@ -56,7 +57,8 @@ void keyTyped() {
   // Build the new lambda expression object
   try {
     lambdaTokens = new TokenString(lcString);
-    root = lambdaTokens.produceDrawing(null);
+    root = new Group(new PVector(0,0), 0, null);
+    lambdaTokens.produceDrawing(root);
   } catch (TokenStringException e) {
     lambdaTokens = null;
   }

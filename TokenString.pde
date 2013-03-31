@@ -107,30 +107,32 @@ class TokenString {
     return out;
   }
   
-  // This function should only be called on a group
-  Group produceDrawing(Group parent) {
-    
+  // This function should be called on a TokenString representing a group only
+  TokenString produceDrawing(Group inContainerGroup) {
     if (this.child == null) {
       println("Error: invalid target for produceDrawing call");
       exit();
     }
     
-    Group g = new Group(new PVector(0,0), 10, parent);
     TokenString nextToken = next;
     
-    // Add inputs to the abstraction group
     for (int i=0; i<val.length(); i++) {
       Input in = new Input(val.charAt(i));
       if (nextToken != null) {
-        in.assignArgument(nextToken.produceDrawing(parent));
-        nextToken = nextToken.next;
+        Group arg = new Group(new PVector(0,0), 0, inContainerGroup.parent);
+        nextToken = nextToken.produceDrawing(arg);
+        in.assignArgument(arg);
       }
-      g.addInput(in);
+      inContainerGroup.addInput(in);
     }
     
-    // TODO: interesting stuff
+    if (child.child == null) {
+      // Variable node
+    } else {
+      // Group node
+    }
     
-    return g;
+    return nextToken;
   }
 }
 
