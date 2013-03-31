@@ -2,7 +2,7 @@
 // Sam Gruber <scgruber@andrew.cmu.edu>
 
 Group root;
-String lcString = "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))(\\fx.fx)";
+String lcString = "(\\xyz.x(yz))";
 TokenString lambdaTokens;
 PFont cantarell;
 float drawingScale;
@@ -30,7 +30,7 @@ void draw() {
   
   // Draw the lambda expressions
   pushMatrix();
-  translate(width/2, height/2);
+  translate(width/2, height/2+20);
   
   fill(255);
   stroke(0);
@@ -60,7 +60,7 @@ void draw() {
 void keyTyped() {
   if (('a' <= key && key <= 'z') || key == '\\' || key == '(' || key == ')' || key == '.') {
     lcString += key;
-  } else if (key == BACKSPACE) {
+  } else if (key == BACKSPACE && lcString.length() > 0) {
     lcString = lcString.substring(0,lcString.length()-1);
   }
   
