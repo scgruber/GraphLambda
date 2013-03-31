@@ -5,6 +5,7 @@ Group root;
 String lcString = "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))(\\fx.fx)";
 TokenString lambdaTokens;
 PFont cantarell;
+float drawingScale;
 
 void setup() {
   size(800,600);
@@ -33,15 +34,24 @@ void draw() {
   
   fill(255);
   stroke(0);
-  strokeWeight(2);
   
   if (root != null) {
+    // Determine appropriate window scale
+    drawingScale = height/(root.getOuterBound().getDiam());
+    pushMatrix();
+    scale(drawingScale);
+    strokeWeight(2/drawingScale);
+    
     root.display();
+    popMatrix();
   }
   
   popMatrix();
   
   // Draw the lambda string
+  fill(200);
+  strokeWeight(0);
+  rect(0,0, width, 40);
   textSize(32);
   fill(0,102,153);
   text(lcString, 10, 30);
