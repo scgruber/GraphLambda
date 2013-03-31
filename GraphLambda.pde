@@ -2,7 +2,7 @@
 // Sam Gruber <scgruber@andrew.cmu.edu>
 
 Group root;
-String lcString = "";
+String lcString = "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))(\\fx.fx)";
 TokenString lambdaTokens;
 PFont cantarell;
 
