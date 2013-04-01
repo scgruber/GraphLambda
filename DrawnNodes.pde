@@ -277,13 +277,13 @@ class Output extends Node{
   
   void setOut(Node newOut) {
     out = newOut;
-    
-    PVector dir = PVector.sub(parent.bound.getCenter(), out.bound.getCenter());
-    angle = dir.heading();
   }
   
   void update() {
-    //bound.setCenter(new PVector(parent.bound.getRadius()*cos(angle), parent.bound.getRadius()*sin(angle)));
+    PVector dir = PVector.sub(parent.absoluteCoords, out.absoluteCoords);
+    angle = dir.heading();
+    
+    bound.setCenter(new PVector(parent.bound.getRadius()*cos(angle), parent.bound.getRadius()*sin(angle)));
   }
   
   void generateAbsoluteCoordinates() {
