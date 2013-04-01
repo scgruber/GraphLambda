@@ -45,7 +45,9 @@ void draw() {
     scale(drawingScale);
     strokeWeight(2/drawingScale);
     
+    root.update();
     root.display();
+    
     popMatrix();
   }
   

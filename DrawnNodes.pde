@@ -27,7 +27,7 @@ class Node {
   void display() {
   }
   
-  void updatePosition() {
+  void update() {
   }
   
   boolean isDescendant(Group grp) {
@@ -61,7 +61,6 @@ class Group extends Node {
   void display() {
     pushMatrix();
     translate(bound.getX(), bound.getY());
-    updatePosition();
     
     fill(255);
     stroke(0);
@@ -100,7 +99,7 @@ class Group extends Node {
     
     for (int i = inputs.size()-1; i >= 0; i--) {
       inputs.get(i).angle = inc*(i+1);
-      inputs.get(i).updatePosition();
+      inputs.get(i).update();
     }
     
     output.setParentRadius(bound.getRadius());
@@ -164,10 +163,10 @@ class Group extends Node {
     interior.add(grp);
   }
   
-  void updatePosition() {
+  void update() {
     PVector newPos = new PVector(0,0);
     for (int i = interior.size()-1; i >= 0; i--) {
-      interior.get(i).updatePosition();
+      interior.get(i).update();
       newPos.add(PVector.mult(interior.get(i).bound.getCenter(), 1/interior.size()));
     }
     bound.setCenter(newPos);
@@ -178,7 +177,7 @@ class Group extends Node {
     float outerRadius = (maxInputRadius * 2) / (PI / inputs.size()-1);
     bound.setRadius(max(innerRadius,outerRadius)+(25/drawingScale));
     for (int i = inputs.size()-1; i >= 0; i--) {
-      inputs.get(i).updatePosition();
+      inputs.get(i).update();
     }
     output.setParentRadius(bound.getRadius());
   }
@@ -229,7 +228,7 @@ class Input extends Node{
     return arg;
   }
   
-  void updatePosition() {
+  void update() {
     bound.setCenter(new PVector(parent.bound.getRadius() * cos(angle), parent.bound.getRadius() * -sin(angle)));
   }
 }
@@ -245,7 +244,6 @@ class Output extends Node{
   }
   
   void display() {
-    updatePosition();
     
     fill(0);
     float drawDiam;
@@ -268,7 +266,7 @@ class Output extends Node{
     angle = dir.heading();
   }
   
-  void updatePosition() {
+  void update() {
     //bound.setCenter(new PVector(parent.bound.getRadius()*cos(angle), parent.bound.getRadius()*sin(angle)));
   }
 }
@@ -291,7 +289,6 @@ class Branch extends Node{
   }
   
   void display() {
-    this.updatePosition();
     if (in != null) {
       line(bound.getX(), bound.getY(), in.bound.getX(), in.bound.getY());
     }
@@ -303,7 +300,7 @@ class Branch extends Node{
     }
   }
   
-  void updatePosition() {
+  void update() {
     PVector newPos = PVector.lerp(in.bound.getCenter(), out.bound.getCenter(), 0.5);
     newPos.lerp(branch.bound.getCenter(), 0.66);
     bound.setCenter(newPos);
@@ -328,7 +325,6 @@ class Application extends Node{
   }
   
   void display() {
-    this.updatePosition();
     if (in != null) {
       line(bound.getX(), bound.getY(), in.bound.getX(), in.bound.getY());
     }
@@ -340,7 +336,7 @@ class Application extends Node{
     }
   }
   
-  void updatePosition() {
+  void update() {
     if (in != null && out != null) {
       bound.setCenter(PVector.lerp(in.bound.getCenter(), out.bound.getCenter(), 0.5));
     }
