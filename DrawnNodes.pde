@@ -25,7 +25,20 @@ class Node {
   }
   
   void display() {
-    return;
+  }
+  
+  void updatePosition() {
+  }
+  
+  boolean isDescendant(Group grp) {
+    Group p = parent;
+    while (p != null) {
+      if (p == grp) {
+        return true;
+      }
+      p = p.parent;
+    }
+    return false;
   }
 }
 
@@ -48,10 +61,12 @@ class Group extends Node {
   void display() {
     pushMatrix();
     translate(bound.getX(), bound.getY());
+    updatePosition();
     
     fill(255);
-    stroke(0);    
+    stroke(0);
     ellipse(0, 0, bound.getDiam(), bound.getDiam());
+    
     for (int i=interior.size()-1; i >= 0; i--) {
       interior.get(i).display();
     }
@@ -62,23 +77,30 @@ class Group extends Node {
       line(output.bound.getX(), output.bound.getY(), out.bound.getX(), out.bound.getY());
     }
     output.display();
-
     
     popMatrix();
   }
   
   void addInput(Input inInput) {
+    inInput.parent = this;
     inputs.add(inInput);
     float inc = PI/(inputs.size()+1);
     
-    if (inInput.bound.getRadius() > maxInputRadius) {
-      maxInputRadius = inInput.bound.getRadius();
+    float newInputRadius;
+    if (inInput.bound.getRadius() == 0) {
+      newInputRadius = 10;
+    } else {
+      newInputRadius = inInput.bound.getRadius();
+    }
+    
+    if (newInputRadius > maxInputRadius) {
+      maxInputRadius = newInputRadius;
       bound.setRadius((maxInputRadius*5)/inc);
     }
     
     for (int i = inputs.size()-1; i >= 0; i--) {
-      inputs.get(i).bound.setCenter(new PVector(bound.getRadius() * cos(inc*(i+1)),
-        bound.getRadius() * -sin(inc*(i+1))));
+      inputs.get(i).angle = inc*(i+1);
+      inputs.get(i).updatePosition();
     }
     
     output.setParentRadius(bound.getRadius());
@@ -101,9 +123,37 @@ class Group extends Node {
   void makeApplication(Node in, Node app, Node out) {
     Application appNode = new Application(this);
     
-    appNode.setIn(in);
+    if (in.getOut() == null) {
+      appNode.setIn(in);
+      in.setOut(appNode);
+    } else {
+      Branch b = new Branch(this);
+      b.setOut(in.getOut());
+      in.getOut().setIn(b);
+      b.setIn(in);
+      in.setOut(b);
+      b.setBranch(appNode);
+      appNode.setIn(b);
+      interior.add(b);
+    }
     appNode.setOut(out);
-    appNode.setApp(app);
+    if (out.getIn() == null) {
+      out.setIn(appNode);
+    } else {
+      // Error
+      //println("Error: multiple assignment of destination input");
+      //exit();
+    }
+    if (app != null) {
+      appNode.setApp(app);
+      if (app.getOut() == null) {
+        app.setOut(appNode);
+      } else {
+        // Error
+        println("Error: multiple assignment of applied argument output");
+        exit();
+      }
+    }
     
     interior.add(appNode);
   }
@@ -113,16 +163,36 @@ class Group extends Node {
     
     interior.add(grp);
   }
+  
+  void updatePosition() {
+    PVector newPos = new PVector(0,0);
+    for (int i = interior.size()-1; i >= 0; i--) {
+      interior.get(i).updatePosition();
+      newPos.add(PVector.mult(interior.get(i).bound.getCenter(), 1/interior.size()));
+    }
+    bound.setCenter(newPos);
+    float innerRadius = 0;
+    for (int i = interior.size()-1; i >= 0; i--) {
+      innerRadius = max(innerRadius, interior.get(i).bound.getRadius());
+    }
+    float outerRadius = (maxInputRadius * 2) / (PI / inputs.size()-1);
+    bound.setRadius(max(innerRadius,outerRadius)+(25/drawingScale));
+    for (int i = inputs.size()-1; i >= 0; i--) {
+      inputs.get(i).updatePosition();
+    }
+    output.setParentRadius(bound.getRadius());
+  }
 }
 
 class Input extends Node{
   // This class produces inputs on abstractions
   Group assignedGroup;
   char arg;
+  float angle;
   
   Input(char inArg) {
     this.arg = inArg;
-    this.bound = new BoundingCircle(new PVector(0,0),10);
+    this.bound = new BoundingCircle(new PVector(0,0),0);
   }
   
   void display() {
@@ -131,7 +201,13 @@ class Input extends Node{
     
     fill(255);
     stroke(0);
-    ellipse(0, 0, bound.getDiam(), bound.getDiam());
+    float drawDiam;
+    if (bound.getRadius() == 0) {
+      drawDiam = 20/drawingScale;
+    } else {
+      drawDiam = bound.getDiam();
+    }
+    ellipse(0, 0, drawDiam, drawDiam);
     if (assignedGroup != null) {
       assignedGroup.display();
     }
@@ -141,7 +217,7 @@ class Input extends Node{
   
   void assignArgument(Group inAssignedGroup) {
     assignedGroup = inAssignedGroup;
-    bound = inAssignedGroup.getBoundingCircle();
+    bound = assignedGroup.getBoundingCircle();
     bound.alterRadius(10);
   }
   
@@ -152,23 +228,48 @@ class Input extends Node{
   char getArg() {
     return arg;
   }
+  
+  void updatePosition() {
+    bound.setCenter(new PVector(parent.bound.getRadius() * cos(angle), parent.bound.getRadius() * -sin(angle)));
+  }
 }
 
 class Output extends Node{
   // This class produces outputs of abstractions
+  float angle;
   
   Output(Group inParent, float inParentRadius) {
     this.parent = inParent;
-    this.bound = new BoundingCircle(new PVector(0,inParentRadius), 5);
+    this.bound = new BoundingCircle(new PVector(0,inParentRadius), 0);
+    this.angle = PI;
   }
   
   void display() {
+    updatePosition();
+    
     fill(0);
-    ellipse(bound.getX(), bound.getY(), bound.getDiam(), bound.getDiam());
+    float drawDiam;
+    if (bound.getRadius() == 0) {
+      drawDiam = 10/drawingScale;
+    } else {
+      drawDiam = bound.getDiam();
+    }
+    ellipse(bound.getX(), bound.getY(), drawDiam, drawDiam);
   }
   
   void setParentRadius(float inParentRadius) {
     bound.setY(inParentRadius);
+  }
+  
+  void setOut(Node newOut) {
+    out = newOut;
+    
+    PVector dir = PVector.sub(parent.bound.getCenter(), out.bound.getCenter());
+    angle = dir.heading();
+  }
+  
+  void updatePosition() {
+    //bound.setCenter(new PVector(parent.bound.getRadius()*cos(angle), parent.bound.getRadius()*sin(angle)));
   }
 }
 
@@ -187,6 +288,25 @@ class Branch extends Node{
   
   Node getBranch() {
     return branch;
+  }
+  
+  void display() {
+    this.updatePosition();
+    if (in != null) {
+      line(bound.getX(), bound.getY(), in.bound.getX(), in.bound.getY());
+    }
+    if (branch != null) {
+      line(bound.getX(), bound.getY(), branch.bound.getX(), branch.bound.getY());
+    }
+    if (out != null) {
+      line(bound.getX(), bound.getY(), out.bound.getX(), out.bound.getY());
+    }
+  }
+  
+  void updatePosition() {
+    PVector newPos = PVector.lerp(in.bound.getCenter(), out.bound.getCenter(), 0.5);
+    newPos.lerp(branch.bound.getCenter(), 0.66);
+    bound.setCenter(newPos);
   }
 }
 
