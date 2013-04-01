@@ -1,6 +1,13 @@
 // GraphLambda
 // Sam Gruber <scgruber@andrew.cmu.edu>
 
+String[] demoStrings = {
+  "(\\xy.x)",
+  "(\\mnf.m(nf))",
+  "(\\xyz.x(yz))",
+  "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))"
+};
+
 Group root;
 String lcString = "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))";
 TokenString lambdaTokens;
@@ -70,6 +77,9 @@ void keyTyped() {
     lcString += key;
   } else if (key == BACKSPACE && lcString.length() > 0) {
     lcString = lcString.substring(0,lcString.length()-1);
+  } else if ('0' <= key && key <= '9') {
+    int index = key - '0';
+    lcString = demoStrings[index];
   }
   
   // Build the new lambda expression object
