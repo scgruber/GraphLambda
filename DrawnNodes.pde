@@ -176,10 +176,11 @@ class Group extends Node {
     bound.setCenter(newPos);
     float innerRadius = 0;
     for (int i = interior.size()-1; i >= 0; i--) {
-      innerRadius = max(innerRadius, interior.get(i).bound.getRadius());
+      BoundingCircle b = interior.get(i).bound;
+      innerRadius = max(innerRadius, abs(b.getCenter().mag()) + interior.get(i).bound.getRadius());
     }
     float outerRadius = (maxInputRadius * 2) / (PI / inputs.size()-1);
-    bound.setRadius(max(innerRadius,outerRadius)+(25/drawingScale));
+    bound.setRadius(max(innerRadius+maxInputRadius,outerRadius)+(25/drawingScale));
     for (int i = inputs.size()-1; i >= 0; i--) {
       inputs.get(i).update();
     }
@@ -304,7 +305,7 @@ class Branch extends Node{
   
   Branch(Group inParent) {
     this.parent = inParent;
-    this.bound = new BoundingCircle(new PVector(0,0), 10);
+    this.bound = new BoundingCircle(new PVector(0,0), 0);
   }
   
   void setBranch(Node newBranch) {
@@ -352,7 +353,7 @@ class Application extends Node{
   
   Application(Group inParent) {
     this.parent = inParent;
-    this.bound = new BoundingCircle(new PVector(0,0), 10);
+    this.bound = new BoundingCircle(new PVector(0,0), 0);
   }
   
   void setApp(Node newApp) {
