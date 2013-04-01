@@ -163,6 +163,11 @@ class Group extends Node {
   }
   
   void update() {
+    if (out != null && out.absoluteCoords != null && output.absoluteCoords.y > out.absoluteCoords.y) {
+      bound.setCenter(PVector.sub(bound.getCenter(), 
+        new PVector(0, output.absoluteCoords.y - out.absoluteCoords.y)));
+    }
+    
     PVector newPos = new PVector(0,0);
     for (int i = interior.size()-1; i >= 0; i--) {
       interior.get(i).update();
@@ -184,6 +189,7 @@ class Group extends Node {
   void generateAbsoluteCoordinates() {
     absoluteCoords = PVector.add(bound.getCenter(), currentTranslation);
     
+    currentTranslation.add(bound.getCenter());
     for (int i = inputs.size()-1; i >= 0; i--) {
       inputs.get(i).generateAbsoluteCoordinates();
     }
@@ -191,6 +197,7 @@ class Group extends Node {
       interior.get(i).generateAbsoluteCoordinates();
     }
     output.generateAbsoluteCoordinates();
+    currentTranslation.sub(bound.getCenter());
   }
 }
 
@@ -321,6 +328,14 @@ class Branch extends Node{
   }
   
   void update() {
+    if (PVector.sub(out.bound.getCenter(), branch.bound.getCenter()).magSq() < 0.1) {
+      PVector dir = PVector.sub(out.bound.getCenter(), in.bound.getCenter());
+      dir.normalize();
+      dir.rotate(HALF_PI);
+      out.bound.setCenter(PVector.add(out.bound.getCenter(),dir));
+      branch.bound.setCenter(PVector.add(branch.bound.getCenter(),dir));
+    }
+    
     PVector newPos = PVector.lerp(in.bound.getCenter(), out.bound.getCenter(), 0.5);
     newPos.lerp(branch.bound.getCenter(), 0.66);
     bound.setCenter(newPos);
