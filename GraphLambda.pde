@@ -7,6 +7,7 @@ TokenString lambdaTokens;
 PFont cantarell;
 float drawingScale;
 ArrayList<Group> groups;
+PVector currentTranslation;
 
 void setup() {
   size(800,600);
@@ -28,6 +29,7 @@ void setup() {
 }
 
 void draw() {
+  currentTranslation = new PVector(0,0);
   background (255);
   smooth();
   
@@ -46,6 +48,7 @@ void draw() {
     strokeWeight(2/drawingScale);
     
     root.update();
+    root.generateAbsoluteCoordinates();
     root.display();
     
     popMatrix();

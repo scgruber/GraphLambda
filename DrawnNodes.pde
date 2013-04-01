@@ -3,6 +3,7 @@ class Node {
   Node in;
   Node out;
   BoundingCircle bound;
+  PVector absoluteCoords;
   
   BoundingCircle getBoundingCircle() {
     return bound.get();
@@ -40,6 +41,9 @@ class Node {
     }
     return false;
   }
+  
+  void generateAbsoluteCoordinates() {
+  }
 }
 
 class Group extends Node {
@@ -59,12 +63,9 @@ class Group extends Node {
   }
   
   void display() {
-    pushMatrix();
-    translate(bound.getX(), bound.getY());
-    
     fill(255);
     stroke(0);
-    ellipse(0, 0, bound.getDiam(), bound.getDiam());
+    ellipse(absoluteCoords.x, absoluteCoords.y, bound.getDiam(), bound.getDiam());
     
     for (int i=interior.size()-1; i >= 0; i--) {
       interior.get(i).display();
@@ -73,11 +74,9 @@ class Group extends Node {
       inputs.get(i).display();
     }
     if (out != null) {
-      line(output.bound.getX(), output.bound.getY(), out.bound.getX(), out.bound.getY());
+      line(output.absoluteCoords.x, output.absoluteCoords.y, out.absoluteCoords.x, out.absoluteCoords.y);
     }
     output.display();
-    
-    popMatrix();
   }
   
   void addInput(Input inInput) {
@@ -181,6 +180,18 @@ class Group extends Node {
     }
     output.setParentRadius(bound.getRadius());
   }
+  
+  void generateAbsoluteCoordinates() {
+    absoluteCoords = PVector.add(bound.getCenter(), currentTranslation);
+    
+    for (int i = inputs.size()-1; i >= 0; i--) {
+      inputs.get(i).generateAbsoluteCoordinates();
+    }
+    for (int i = interior.size()-1; i >= 0; i--) {
+      interior.get(i).generateAbsoluteCoordinates();
+    }
+    output.generateAbsoluteCoordinates();
+  }
 }
 
 class Input extends Node{
@@ -195,9 +206,6 @@ class Input extends Node{
   }
   
   void display() {
-    pushMatrix();
-    translate(bound.getX(), bound.getY());
-    
     fill(255);
     stroke(0);
     float drawDiam;
@@ -206,12 +214,10 @@ class Input extends Node{
     } else {
       drawDiam = bound.getDiam();
     }
-    ellipse(0, 0, drawDiam, drawDiam);
+    ellipse(absoluteCoords.x, absoluteCoords.y, drawDiam, drawDiam);
     if (assignedGroup != null) {
       assignedGroup.display();
     }
-    
-    popMatrix();
   }
   
   void assignArgument(Group inAssignedGroup) {
@@ -230,6 +236,16 @@ class Input extends Node{
   
   void update() {
     bound.setCenter(new PVector(parent.bound.getRadius() * cos(angle), parent.bound.getRadius() * -sin(angle)));
+  }
+  
+  void generateAbsoluteCoordinates() {
+    absoluteCoords = PVector.add(bound.getCenter(), currentTranslation);
+    
+    if (assignedGroup != null) {
+      currentTranslation.add(bound.getCenter());
+      assignedGroup.generateAbsoluteCoordinates();
+      currentTranslation.sub(bound.getCenter());
+    }
   }
 }
 
@@ -252,7 +268,7 @@ class Output extends Node{
     } else {
       drawDiam = bound.getDiam();
     }
-    ellipse(bound.getX(), bound.getY(), drawDiam, drawDiam);
+    ellipse(absoluteCoords.x, absoluteCoords.y, drawDiam, drawDiam);
   }
   
   void setParentRadius(float inParentRadius) {
@@ -268,6 +284,10 @@ class Output extends Node{
   
   void update() {
     //bound.setCenter(new PVector(parent.bound.getRadius()*cos(angle), parent.bound.getRadius()*sin(angle)));
+  }
+  
+  void generateAbsoluteCoordinates() {
+    absoluteCoords = PVector.add(bound.getCenter(), currentTranslation);
   }
 }
 
@@ -290,13 +310,13 @@ class Branch extends Node{
   
   void display() {
     if (in != null) {
-      line(bound.getX(), bound.getY(), in.bound.getX(), in.bound.getY());
+      line(absoluteCoords.x, absoluteCoords.y, in.absoluteCoords.x, in.absoluteCoords.y);
     }
     if (branch != null) {
-      line(bound.getX(), bound.getY(), branch.bound.getX(), branch.bound.getY());
+      line(absoluteCoords.x, absoluteCoords.y, branch.absoluteCoords.x, branch.absoluteCoords.y);
     }
     if (out != null) {
-      line(bound.getX(), bound.getY(), out.bound.getX(), out.bound.getY());
+      line(absoluteCoords.x, absoluteCoords.y, out.absoluteCoords.x, out.absoluteCoords.y);
     }
   }
   
@@ -304,6 +324,10 @@ class Branch extends Node{
     PVector newPos = PVector.lerp(in.bound.getCenter(), out.bound.getCenter(), 0.5);
     newPos.lerp(branch.bound.getCenter(), 0.66);
     bound.setCenter(newPos);
+  }
+  
+  void generateAbsoluteCoordinates() {
+    absoluteCoords = PVector.add(bound.getCenter(), currentTranslation);
   }
 }
 
@@ -326,13 +350,13 @@ class Application extends Node{
   
   void display() {
     if (in != null) {
-      line(bound.getX(), bound.getY(), in.bound.getX(), in.bound.getY());
+      line(absoluteCoords.x, absoluteCoords.y, in.absoluteCoords.x, in.absoluteCoords.y);
     }
     if (app != null) {
-      line(bound.getX(), bound.getY(), app.bound.getX(), app.bound.getY());
+      line(absoluteCoords.x, absoluteCoords.y, app.absoluteCoords.x, app.absoluteCoords.y);
     }
     if (out != null) {
-      line(bound.getX(), bound.getY(), out.bound.getX(), out.bound.getY());
+      line(absoluteCoords.x, absoluteCoords.y, out.absoluteCoords.x, out.absoluteCoords.y);
     }
   }
   
@@ -340,6 +364,10 @@ class Application extends Node{
     if (in != null && out != null) {
       bound.setCenter(PVector.lerp(in.bound.getCenter(), out.bound.getCenter(), 0.5));
     }
+  }
+  
+  void generateAbsoluteCoordinates() {
+    absoluteCoords = PVector.add(bound.getCenter(), currentTranslation);
   }
 }
 
