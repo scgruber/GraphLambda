@@ -2,14 +2,16 @@
 // Sam Gruber <scgruber@andrew.cmu.edu>
 
 String[] demoStrings = {
+  "",
   "(\\xy.x)",
   "(\\mnf.m(nf))",
-  "(\\xyz.x(yz))",
+  "(\\xyz.xz(yz))",
+  "(\\nfx.f(nfx))",
   "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))"
 };
 
 Group root;
-String lcString = "(\\nfx.n(\\gh.h(gf))(\\u.x)(\\u.u))";
+String lcString = "";
 TokenString lambdaTokens;
 PFont cantarell;
 float drawingScale;
