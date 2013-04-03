@@ -23,11 +23,18 @@ public class GraphLambda extends PApplet {
 	 */
 	public void setup() {
 		size(800,600);
-		background(255);
-		strokeWeight(2);
 		
 		cantarell = loadFont("Cantarell-Bold-48.vlw");
 		textFont(cantarell, 32);
+	}
+	
+	/**
+	 * Draw the frame
+	 */
+	public void draw() {
+		background(255);
+		strokeWeight(2);
+		stroke(0);
 	}
 
 }
