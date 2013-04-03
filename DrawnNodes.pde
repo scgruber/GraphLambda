@@ -180,7 +180,7 @@ class Group extends Node {
       innerRadius = max(innerRadius, abs(b.getCenter().mag()) + interior.get(i).bound.getRadius());
     }
     float outerRadius = (maxInputRadius * 2) / (PI / inputs.size()-1);
-    bound.setRadius(max(innerRadius+maxInputRadius,outerRadius)+(25/drawingScale));
+    bound.setRadius(max(innerRadius+maxInputRadius,outerRadius)+(10/drawingScale));
     for (int i = inputs.size()-1; i >= 0; i--) {
       inputs.get(i).update();
     }
