@@ -14,6 +14,7 @@ public class GraphLambda extends PApplet {
 	String[] demoStrings = {
 		"\\xy.x"	
 	};
+	int textHeight;
 	
 	/**
 	 * Calls the main processing presentation runtime
@@ -32,10 +33,11 @@ public class GraphLambda extends PApplet {
 		
 		cantarell = loadFont("Cantarell-Bold-48.vlw");
 		textFont(cantarell, 32);
+		textHeight = 40;
 		
 		try {
 			ts = new TokenString(this, demoStrings[0]);
-			text = new LambdaText(this, ts.toString());
+			text = new LambdaText(this, ts.toString(), textHeight);
 		} catch(TokenString.TokenStringException e) {
 			System.exit(1);
 		}

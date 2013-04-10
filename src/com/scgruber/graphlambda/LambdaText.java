@@ -11,13 +11,15 @@ public class LambdaText {
 	
 	/*
 	 * Blank constructor
+	 * @param parent
+	 * @param height
 	 */
-	public LambdaText(PApplet parent) {
+	public LambdaText(PApplet parent, int height) {
 		this.parent = parent;
 		this.text = "";
 		this.pos = 0;
 		this.isDirty = false;
-		this.buf = parent.createGraphics(parent.width, 40);
+		this.buf = parent.createGraphics(parent.width, height);
 		
 		/* Preload the buffer */
 		buf.beginDraw();
@@ -29,13 +31,14 @@ public class LambdaText {
 	 * Creates a LambdaText with an initial string value
 	 * @param parent 
 	 * @param text
+	 * @param height
 	 */
-	public LambdaText(PApplet parent, String text) {
+	public LambdaText(PApplet parent, String text, int height) {
 		this.parent = parent;
 		this.text = text;
 		this.pos = 0;
 		this.isDirty = true;
-		this.buf = parent.createGraphics(parent.width, 40);
+		this.buf = parent.createGraphics(parent.width, height);
 		
 		/* Preload the buffer */
 		buf.beginDraw();
