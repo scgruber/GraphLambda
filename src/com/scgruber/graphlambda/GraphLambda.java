@@ -10,8 +10,8 @@ public class GraphLambda extends PApplet {
 	PFont cantarell;
 	
 	/**
+	 * Calls the main processing presentation runtime
 	 * @param args
-	 * Calls the Processing presentation runtime
 	 */
 	public static void main(String[] args) {
 		PApplet.main(new String[] { "--present", "com.scgruber.graphlambda.GraphLambda" });
