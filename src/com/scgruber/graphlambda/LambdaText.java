@@ -3,11 +3,11 @@ package com.scgruber.graphlambda;
 import processing.core.*;
 
 public class LambdaText {
-	PApplet parent;
-	String text;
-	int pos;
-	boolean isDirty;
-	PGraphics buf;
+	private static PApplet parent;
+	private String text;
+	private int pos;
+	private boolean isDirty;
+	private PGraphics buf;
 	
 	/*
 	 * Blank constructor
