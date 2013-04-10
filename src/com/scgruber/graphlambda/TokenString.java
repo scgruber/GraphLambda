@@ -111,6 +111,24 @@ public class TokenString {
 	    }
 	}
 	
+	public String toString() {
+		String out = "";
+		if (child != null) {
+			out += "(";
+		    if (val != "") { // Abstraction
+		        out += "\\" + val + ".";
+		    }
+		    out += child.toString();
+		    out += ")";
+		} else {
+		  	out += val;
+		}
+		if (next != null) {
+		  	out += next.toString();
+		}
+		return out;
+	}
+	
 	public static class TokenStringException extends Exception {
 		public TokenStringException(String msg) {
 			super(msg);
