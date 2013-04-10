@@ -8,6 +8,12 @@ public class GraphLambda extends PApplet {
 	 * Application variables
 	 */
 	PFont cantarell;
+	TokenString ts;
+	LambdaText text;
+	
+	String[] demoStrings = {
+		"\\xy.x"	
+	};
 	
 	/**
 	 * Calls the main processing presentation runtime
@@ -26,6 +32,13 @@ public class GraphLambda extends PApplet {
 		
 		cantarell = loadFont("Cantarell-Bold-48.vlw");
 		textFont(cantarell, 32);
+		
+		try {
+			ts = new TokenString(this, demoStrings[0]);
+			text = new LambdaText(this, ts.toString());
+		} catch(TokenString.TokenStringException e) {
+			System.exit(1);
+		}
 	}
 	
 	/**
@@ -35,6 +48,8 @@ public class GraphLambda extends PApplet {
 		background(255);
 		strokeWeight(2);
 		stroke(0);
+		
+		text.display();
 	}
 
 }
