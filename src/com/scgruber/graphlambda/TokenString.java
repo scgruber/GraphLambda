@@ -2,31 +2,25 @@ package com.scgruber.graphlambda;
 
 import processing.core.*;
 
-public class TokenString {
-	private static PApplet parentApplet;
-	
+public class TokenString {	
 	private String val;
 	private TokenString next;
 	private TokenString child;
 	
 	/**
 	 * Blank constructor
-	 * @param parent
 	 */
-	public TokenString(PApplet parent) {
-		this.parentApplet = parent;
+	public TokenString() {
 		this.val = "";
 	}
 	
 	/**
 	 * Creates a TokenString chain given a string of lambda calculus
-	 * @param parent
 	 * @param lambdaString
 	 * @throws TokenStringException
 	 */
-	public TokenString(PApplet parent, String lambdaString) throws TokenStringException {
+	public TokenString(String lambdaString) throws TokenStringException {
 		/* Initial values */
-		this.parentApplet = parent;
 		this.val = "";
 		this.next = null;
 		this.child = null;
@@ -66,13 +60,13 @@ public class TokenString {
 	        	if (childLambdaString.length() > 0) {
 	        		System.out.print("Parsing Child: ");
 	        		System.out.println(childLambdaString);
-	        		this.child = new TokenString(parent, childLambdaString);
+	        		this.child = new TokenString(childLambdaString);
 	        	}
 	        	String nextLambdaString = lambdaString.substring(finishIndex);
 	        	if (nextLambdaString.length() > 0) {
 	        		System.out.print("Parsing Next: ");
 	        		System.out.println(nextLambdaString);
-	        		this.next = new TokenString(parent, nextLambdaString);
+	        		this.next = new TokenString(nextLambdaString);
 	        	}
 	        } else { // Group
 	        	int startIndex = 1;
@@ -91,13 +85,13 @@ public class TokenString {
 	        	if (childLambdaString.length() > 0) {
 	        		System.out.print("Parsing Child: ");
 	        		System.out.println(childLambdaString);
-	        		this.child = new TokenString(parent, childLambdaString);
+	        		this.child = new TokenString(childLambdaString);
 	        	}
 	        	String nextLambdaString = lambdaString.substring(finishIndex);
 	        	if (nextLambdaString.length() > 0) {
 	        		System.out.print("Parsing Next: ");
 	        		System.out.println(nextLambdaString);
-	        		this.next = new TokenString(parent, nextLambdaString);
+	        		this.next = new TokenString(nextLambdaString);
 	        	}
 	        }
 	    } else { // Normal token
@@ -106,7 +100,7 @@ public class TokenString {
 	        if (nextLambdaString.length() > 0) {
 	        	System.out.print("Parsing Next: ");
 	        	System.out.println(nextLambdaString);
-	        	this.next = new TokenString(parent, nextLambdaString);
+	        	this.next = new TokenString(nextLambdaString);
 	        }
 	    }
 	}
@@ -127,6 +121,10 @@ public class TokenString {
 		  	out += next.toString();
 		}
 		return out;
+	}
+	
+	public void produceDrawing(Group into) {
+		
 	}
 	
 	public static class TokenStringException extends Exception {

@@ -1,10 +1,13 @@
 package com.scgruber.graphlambda;
 
+import com.scgruber.graphlambda.TokenString.TokenStringException;
+
 import processing.core.*;
 
 public class LambdaText {
 	private static PApplet parent;
 	private String text;
+	private TokenString tokens;
 	private int pos;
 	private boolean isDirty;
 	private PGraphics buf;
@@ -17,6 +20,7 @@ public class LambdaText {
 	public LambdaText(PApplet parent, int height) {
 		this.parent = parent;
 		this.text = "";
+		this.tokens = new TokenString();
 		this.pos = 0;
 		this.isDirty = false;
 		this.buf = parent.createGraphics(parent.width, height);
@@ -36,6 +40,11 @@ public class LambdaText {
 	public LambdaText(PApplet parent, String text, int height) {
 		this.parent = parent;
 		this.text = text;
+		try {
+			this.tokens = new TokenString(text);
+		} catch (TokenStringException e) {
+			e.printStackTrace();
+		}
 		this.pos = 0;
 		this.isDirty = true;
 		this.buf = parent.createGraphics(parent.width, height);
@@ -100,6 +109,13 @@ public class LambdaText {
 		
 			buf.textSize(24);
 			buf.background(hasFocus ? parent.color(100,150,125) : parent.color(100,100,100));
+			
+			/* Regenerate the TokenString object */
+			try {
+				tokens = new TokenString(text);
+			} catch (TokenStringException e) {
+				e.printStackTrace();
+			}
 			
 			/* Splice in the position marker to the text */
 			String drawnText = text + " ";
