@@ -7,12 +7,14 @@ public class Group {
 	private PVector pos;
 	private float radius;
 	private ArrayList<Group> inputs;
+	private ArrayList<Node> interior;
 	private boolean isDirty;
 	
 	public Group() {
 		this.pos = new PVector(0,0);
 		this.radius = 10.0f;
 		this.inputs = new ArrayList();
+		this.interior = new ArrayList();
 		this.isDirty = false;
 	}
 	
@@ -30,12 +32,17 @@ public class Group {
 		buf.ellipse(pos.x, pos.y, 2*radius, 2*radius);
 	}
 	
-	/* Getters and setters */
-	
 	public void addInput(Group inInput) {
 		inputs.add(inInput);
 		isDirty = true;
 	}
+	
+	public void addInteriorNode(Node inNode) {
+		interior.add(inNode);
+		isDirty = true;
+	}
+	
+	/* Getters and setters */
 	
 	public float getRadius() {
 		return radius;
