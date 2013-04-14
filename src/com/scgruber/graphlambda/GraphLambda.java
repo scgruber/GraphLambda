@@ -55,8 +55,9 @@ public class GraphLambda extends PApplet {
 		strokeWeight(2);
 		stroke(0);
 		
-		activeText.display();
-		activeDrawing.display();
+		
+		activeText.display(uiContext == Context.TEXTFIELD);
+		activeDrawing.display(uiContext == Context.DRAWING);
 	}
 	
 	/* Interaction events */
@@ -81,11 +82,27 @@ public class GraphLambda extends PApplet {
 			case DELETE:
 				activeText.deleteChar();
 				break;
+			case RETURN:
+			case ENTER:
+				uiContext = Context.DRAWING;
+				activeText.dirty();
+				activeDrawing.dirty();
+				break;
 			default:
 				activeText.insertChar(key);
 			}
 			break;
 		case DRAWING:
+			switch(key) {
+			case RETURN:
+			case ENTER:
+				uiContext = Context.TEXTFIELD;
+				activeText.dirty();
+				activeDrawing.dirty();
+				break;
+			default:
+				break;
+			}
 			break;
 		case TOOLBAR:
 			break;
@@ -98,6 +115,8 @@ public class GraphLambda extends PApplet {
 		} else {
 			uiContext = Context.TEXTFIELD;
 		}
+		activeText.dirty();
+		activeDrawing.dirty();
 	}
 	
 	/*

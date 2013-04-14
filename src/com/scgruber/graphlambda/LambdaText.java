@@ -93,13 +93,13 @@ public class LambdaText {
 	 * Redraws to the draw buffer if the text is dirty
 	 * Then draws the buffer on the screen
 	 */
-	public void display() {
+	public void display(boolean hasFocus) {
 		if (isDirty) {
 			/* We need to recreate the draw buffer */
 			buf.beginDraw();
 		
 			buf.textSize(24);
-			buf.background(100);
+			buf.background(hasFocus ? parent.color(100,150,125) : parent.color(100,100,100));
 			
 			/* Splice in the position marker to the text */
 			String drawnText = text + " ";
@@ -113,5 +113,9 @@ public class LambdaText {
 		}
 		/* Finally draw the buffer to the screen */
 		parent.image(buf, 0, 0);
+	}
+	
+	public void dirty() {
+		isDirty = true;
 	}
 }

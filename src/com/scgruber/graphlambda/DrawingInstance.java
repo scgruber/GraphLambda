@@ -45,7 +45,7 @@ public class DrawingInstance {
 	 * Update drawing buffer if necessary
 	 * Display the drawing
 	 */
-	public void display() {
+	public void display(boolean hasFocus) {
 		if (isDirty) {
 			/* Update the drawing buffer */
 			buf.beginDraw();
@@ -62,5 +62,9 @@ public class DrawingInstance {
 			isDirty = false;
 		}
 		parentApplet.image(buf, 0, heightOffset);
+	}
+	
+	public void dirty() {
+		isDirty = true;
 	}
 }
