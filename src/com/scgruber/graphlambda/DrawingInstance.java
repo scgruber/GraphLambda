@@ -58,6 +58,6 @@ public class DrawingInstance {
 			
 			isDirty = false;
 		}
-		parent.image(buf, parent.width, heightOffset);
+		parent.image(buf, 0, heightOffset);
 	}
 }
