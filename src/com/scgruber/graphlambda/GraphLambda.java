@@ -36,7 +36,7 @@ public class GraphLambda extends PApplet {
 		cantarell = loadFont("Cantarell-Bold-48.vlw");
 		textFont(cantarell, 32);
 		textHeight = 40;
-		uiContext = Context.TEXTFIELD;
+		uiContext = Context.DRAWING;
 		
 		try {
 			ts = new TokenString(this, demoStrings[0]);
@@ -58,6 +58,8 @@ public class GraphLambda extends PApplet {
 		activeText.display();
 		activeDrawing.display();
 	}
+	
+	/* Interaction events */
 	
 	public void keyPressed() {
 		switch (uiContext) {
@@ -87,6 +89,14 @@ public class GraphLambda extends PApplet {
 			break;
 		case TOOLBAR:
 			break;
+		}
+	}
+	
+	public void mouseClicked() {
+		if (mouseY > textHeight) {
+			uiContext = Context.DRAWING;
+		} else {
+			uiContext = Context.TEXTFIELD;
 		}
 	}
 	
