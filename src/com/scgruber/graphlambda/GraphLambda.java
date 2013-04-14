@@ -9,7 +9,8 @@ public class GraphLambda extends PApplet {
 	 */
 	PFont cantarell;
 	TokenString ts;
-	LambdaText text;
+	LambdaText activeText;
+	DrawingInstance activeDrawing;
 	
 	String[] demoStrings = {
 		"\\xy.x"	
@@ -37,7 +38,8 @@ public class GraphLambda extends PApplet {
 		
 		try {
 			ts = new TokenString(this, demoStrings[0]);
-			text = new LambdaText(this, ts.toString(), textHeight);
+			activeText = new LambdaText(this, ts.toString(), textHeight);
+			activeDrawing = new DrawingInstance(this, textHeight);
 		} catch(TokenString.TokenStringException e) {
 			System.exit(1);
 		}
@@ -51,7 +53,8 @@ public class GraphLambda extends PApplet {
 		strokeWeight(2);
 		stroke(0);
 		
-		text.display();
+		activeText.display();
+		activeDrawing.display();
 	}
 
 }

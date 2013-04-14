@@ -62,19 +62,19 @@ public class LambdaText {
 	 * Then draws the buffer on the screen
 	 */
 	public void display() {
-		if (buf != null) {
-			if (isDirty) {
-				/* We need to recreate the draw buffer */
-				buf.beginDraw();
+		if (isDirty) {
+			/* We need to recreate the draw buffer */
+			buf.beginDraw();
+		
+			buf.textSize(24);
+			buf.background(100);
+			buf.text(text, 10, 30);
+		
+			buf.endDraw();
 			
-				buf.textSize(24);
-				buf.background(100);
-				buf.text(text, 10, 30);
-			
-				buf.endDraw();
-			}
-			/* Finally draw the buffer to the screen */
-			parent.image(buf, 0, 0);
+			isDirty = false;
 		}
+		/* Finally draw the buffer to the screen */
+		parent.image(buf, 0, 0);
 	}
 }
