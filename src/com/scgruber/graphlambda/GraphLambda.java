@@ -11,6 +11,7 @@ public class GraphLambda extends PApplet {
 	TokenString ts;
 	LambdaText activeText;
 	DrawingInstance activeDrawing;
+	Context uiContext;
 	
 	String[] demoStrings = {
 		"\\xy.x"	
@@ -35,6 +36,7 @@ public class GraphLambda extends PApplet {
 		cantarell = loadFont("Cantarell-Bold-48.vlw");
 		textFont(cantarell, 32);
 		textHeight = 40;
+		uiContext = Context.TEXTFIELD;
 		
 		try {
 			ts = new TokenString(this, demoStrings[0]);
@@ -55,6 +57,25 @@ public class GraphLambda extends PApplet {
 		
 		activeText.display();
 		activeDrawing.display();
+	}
+	
+	public void keyPressed() {
+		switch (uiContext) {
+		case TEXTFIELD:
+			activeText.insertChar(key);
+			break;
+		case DRAWING:
+			break;
+		case TOOLBAR:
+			break;
+		}
+	}
+	
+	/*
+	 * Enumerated possible contexts for user interaction
+	 */
+	private enum Context {
+		TEXTFIELD, DRAWING, TOOLBAR
 	}
 
 }
