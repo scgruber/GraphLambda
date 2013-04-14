@@ -52,8 +52,9 @@ public class LambdaText {
 	public void insertChar(char c) {
 		String ins = Character.toString(c);
 		String prefix = text.substring(0, pos);
-		String suffix = text.substring(pos+1);
+		String suffix = text.substring(pos);
 		this.text = "".concat(prefix).concat(ins).concat(suffix);
+		pos++;
 		this.isDirty = true;
 	}
 	
@@ -68,7 +69,11 @@ public class LambdaText {
 		
 			buf.textSize(24);
 			buf.background(100);
-			buf.text(text, 10, 30);
+			
+			/* Splice in the position marker to the text */
+			String drawnText = text.substring(0, pos+1) + "\u0332" + text.substring(pos+1);
+			
+			buf.text(drawnText, 10, 30);
 		
 			buf.endDraw();
 			
