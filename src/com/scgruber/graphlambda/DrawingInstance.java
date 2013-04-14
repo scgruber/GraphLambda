@@ -3,9 +3,10 @@ package com.scgruber.graphlambda;
 import processing.core.*;
 
 public class DrawingInstance {
-	private static PApplet parent;
+	private static PApplet parentApplet;
 	private int heightOffset;
 	private PGraphics buf;
+	private Group drawing;
 	private String name;
 	private boolean isDirty;
 	
@@ -16,9 +17,10 @@ public class DrawingInstance {
 	 * @param height
 	 */
 	public DrawingInstance(PApplet parent, int heightOffset) {
-		this.parent = parent;
+		this.parentApplet = parent;
 		this.heightOffset = heightOffset;
 		this.buf = parent.createGraphics(parent.width, parent.height - heightOffset);
+		this.drawing = new Group();
 		this.name = "";
 		this.isDirty = true;
 		
@@ -51,13 +53,14 @@ public class DrawingInstance {
 			buf.background(255);
 			buf.stroke(100);
 			
-			buf.line(0, 0, 50, 50);
-			System.out.println("Executed display draw for DrawingInstance");
+			buf.translate(buf.width/2, buf.height/2);
+			
+			drawing.display(buf);
 			
 			buf.endDraw();
 			
 			isDirty = false;
 		}
-		parent.image(buf, 0, heightOffset);
+		parentApplet.image(buf, 0, heightOffset);
 	}
 }
