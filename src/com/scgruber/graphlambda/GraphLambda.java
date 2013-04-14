@@ -62,7 +62,26 @@ public class GraphLambda extends PApplet {
 	public void keyPressed() {
 		switch (uiContext) {
 		case TEXTFIELD:
-			activeText.insertChar(key);
+			switch(key) {
+			case CODED:
+				switch(keyCode) {
+				case LEFT:
+					activeText.moveLeft();
+					break;
+				case RIGHT:
+					activeText.moveRight();
+					break;
+				default:
+					break;
+				}
+				break;
+			case BACKSPACE:
+			case DELETE:
+				activeText.deleteChar();
+				break;
+			default:
+				activeText.insertChar(key);
+			}
 			break;
 		case DRAWING:
 			break;

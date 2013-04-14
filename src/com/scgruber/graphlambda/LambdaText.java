@@ -47,15 +47,46 @@ public class LambdaText {
 	}
 	
 	/*
-	 * Updates the text by inserting a character at pos
+	 * Methods for updating the text from user input
 	 */
 	public void insertChar(char c) {
 		String ins = Character.toString(c);
 		String prefix = text.substring(0, pos);
 		String suffix = text.substring(pos);
-		this.text = "".concat(prefix).concat(ins).concat(suffix);
+		text = "".concat(prefix).concat(ins).concat(suffix);
 		pos++;
-		this.isDirty = true;
+		isDirty = true;
+	}
+	
+	public void deleteChar() {
+		if (pos == 0) {
+			/* Delete the first character unless the string is empty */
+			if (text.length() > 0) {
+				text = text.substring(1);
+			}
+		} else if (pos == text.length()-1) {
+			/* Delete the last character, pos becomes the new last character */
+			text = text.substring(0, pos);
+			pos--;
+		} else {
+			/* Delete at pos, pos becomes the character to the right */
+			text = text.substring(0, pos) + text.substring(pos+1);
+		}
+		isDirty = true;
+	}
+	
+	public void moveLeft() {
+		if (pos != 0) {
+			pos--;
+			isDirty = true;
+		}
+	}
+	
+	public void moveRight() {
+		if (pos != text.length()) {
+			pos++;
+			isDirty = true;
+		}
 	}
 	
 	/*
@@ -71,7 +102,8 @@ public class LambdaText {
 			buf.background(100);
 			
 			/* Splice in the position marker to the text */
-			String drawnText = text.substring(0, pos+1) + "\u0332" + text.substring(pos+1);
+			String drawnText = text + " ";
+			drawnText = drawnText.substring(0, pos+1) + "\u0332" + drawnText.substring(pos+1);
 			
 			buf.text(drawnText, 10, 30);
 		
