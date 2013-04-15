@@ -14,13 +14,22 @@ public class Input extends Node {
 		this.out = new ArrayList();
 		this.movable = false;
 		this.appliedGroup = null;
-		this.radius = 0.0f;
+		this.radius = 10.0f;
 		this.arg = arg;
 	}
 	
 	/* Getters and setters */
 	public void setGroup(Group grp) {
-		this.appliedGroup = grp;
+		appliedGroup = grp;
+		grp.setPos(pos);
+		radius = grp.getRadius() + 5.0f;
+	}
+	
+	public void setPos(PVector pos) {
+		this.pos = pos.get();
+		if (appliedGroup != null) {
+			appliedGroup.setPos(pos);
+		}
 	}
 	
 	public float getRadius() {
@@ -29,5 +38,17 @@ public class Input extends Node {
 	
 	public char getArg() {
 		return arg;
+	}
+	
+	public void display(PGraphics buf) {
+		buf.fill(255);
+		buf.stroke(0);
+		buf.strokeWeight(2);
+		
+		buf.ellipse(pos.x, pos.y, 2*radius, 2*radius);
+		
+		if (appliedGroup != null) {
+			appliedGroup.display(buf);
+		}
 	}
 }
