@@ -24,6 +24,10 @@ public class Node {
 	}
 
 	/* Getters and setters */
+	public void setPos(PVector inPos) {
+		pos = inPos.get();
+	}
+	
 	public PVector getPos() {
 		return pos.get();
 	}
