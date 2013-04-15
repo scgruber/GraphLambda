@@ -123,8 +123,63 @@ public class TokenString {
 		return out;
 	}
 	
-	public void produceDrawing(Group into) {
+	public TokenString produceDrawing(Group into) throws TokenStringException {
+		if (this.child == null) {
+			throw new TokenStringException("Cannot draw a childless root.");
+		}
 		
+		
+		/* Assign arguments into the group */
+		TokenString nextToken = next;	    
+	    for (int i=0; i<val.length(); i++) {
+	      Input in = new Input(val.charAt(i));
+	      if (nextToken != null) {
+	        Group arg = new Group(into.getParent(), null);
+	        nextToken.makeSingleton().produceDrawing(arg);
+	        nextToken = nextToken.next;
+	        in.setGroup(arg);
+	      }
+	      into.addInput(in);
+	    }
+	    
+	    
+	    TokenString nextChild = child;
+	    Node appliesTo = null;
+	    while (nextChild != null) {
+	      if (nextChild.child == null) {
+	        // Application node
+	        Input origin = into.getInput(nextChild.val.charAt(0));
+	        Node output;
+	        if (appliesTo != null) {
+	          output = appliesTo;
+	        } else {
+	          output = into.getOutput();
+	        }
+	        appliesTo = into.addMerge(origin, null, output);
+	        nextChild = nextChild.next;
+	      } else {
+	        // Group node
+	        Node output;
+	        if (appliesTo != null) {
+	          output = appliesTo;
+	        } else {
+	          output = into.getOutput();
+	        }
+	        Group grp = new Group(into, output);
+	        nextChild = nextChild.produceDrawing(grp);
+	        into.addGroup(grp);
+	        break;
+	      }
+	    }
+	    
+	    return nextToken;
+	}
+	
+	public TokenString makeSingleton() {
+		TokenString singleton = new TokenString();
+		singleton.val = val;
+		singleton.child = child;
+		return singleton;
 	}
 	
 	public static class TokenStringException extends Exception {

@@ -20,7 +20,7 @@ public class DrawingInstance {
 		this.parentApplet = parent;
 		this.heightOffset = heightOffset;
 		this.buf = parent.createGraphics(parent.width, parent.height - heightOffset);
-		this.drawing = new Group();
+		this.drawing = new Group(null, null);
 		this.name = "";
 		this.isDirty = true;
 		
