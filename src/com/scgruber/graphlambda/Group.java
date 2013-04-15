@@ -87,8 +87,8 @@ public class Group {
 		float defaultRadius = 10.0f;
 		
 		float totalInputDiams = 0.0f;
-		for (int i = inputs.size(); i >= 0; i--) {
-			totalInputDiams += inputs.get(i).getRadius();
+		for (int i = inputs.size()-1; i >= 0; i--) {
+			totalInputDiams += (2*inputs.get(i).getRadius());
 		}
 		/* The total size of the inputs cannot be more than PI * radius */
 		float radiusByInputs = totalInputDiams/((float) Math.PI);
