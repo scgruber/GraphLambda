@@ -6,24 +6,27 @@ import processing.core.*;
 
 public class LambdaText {
 	private static PApplet parent;
+	private Frame frame;
 	private String text;
 	private TokenString tokens;
 	private int pos;
 	private boolean isDirty;
 	private PGraphics buf;
+	private boolean isValid;
 	
 	/*
 	 * Blank constructor
 	 * @param parent
 	 * @param height
 	 */
-	public LambdaText(PApplet parent, int height) {
+	public LambdaText(PApplet parent, Frame frame, int height) {
 		this.parent = parent;
+		this.frame = frame;
 		this.text = "";
-		this.tokens = new TokenString();
 		this.pos = 0;
 		this.isDirty = false;
 		this.buf = parent.createGraphics(parent.width, height);
+		this.isValid = true;
 		
 		/* Preload the buffer */
 		buf.beginDraw();
@@ -37,17 +40,14 @@ public class LambdaText {
 	 * @param text
 	 * @param height
 	 */
-	public LambdaText(PApplet parent, String text, int height) {
+	public LambdaText(PApplet parent, Frame frame, String text, int height) {
 		this.parent = parent;
+		this.frame = frame;
 		this.text = text;
-		try {
-			this.tokens = new TokenString(text);
-		} catch (TokenStringException e) {
-			e.printStackTrace();
-		}
 		this.pos = 0;
 		this.isDirty = true;
 		this.buf = parent.createGraphics(parent.width, height);
+		this.isValid = true;
 		
 		/* Preload the buffer */
 		buf.beginDraw();
@@ -73,9 +73,9 @@ public class LambdaText {
 			if (text.length() > 0) {
 				text = text.substring(1);
 			}
-		} else if (pos == text.length()-1) {
+		} else if (pos >= text.length()-1) {
 			/* Delete the last character, pos becomes the new last character */
-			text = text.substring(0, pos);
+			text = text.substring(0, text.length()-1);
 			pos--;
 		} else {
 			/* Delete at pos, pos becomes the character to the right */
@@ -110,16 +110,14 @@ public class LambdaText {
 			buf.textSize(24);
 			buf.background(hasFocus ? parent.color(100,150,125) : parent.color(100,100,100));
 			
-			/* Regenerate the TokenString object */
-			try {
-				tokens = new TokenString(text);
-			} catch (TokenStringException e) {
-				e.printStackTrace();
-			}
+			/* Update the TokenString for the frame */
+			frame.generateTokenString(text);
 			
 			/* Splice in the position marker to the text */
 			String drawnText = text + " ";
 			drawnText = drawnText.substring(0, pos+1) + "\u0332" + drawnText.substring(pos+1);
+			
+			buf.fill(isValid ? parent.color(255) : parent.color(255, 155, 155));
 			
 			buf.text(drawnText, 10, 30);
 		
@@ -133,5 +131,13 @@ public class LambdaText {
 	
 	public void dirty() {
 		isDirty = true;
+	}
+	
+	public void setValid() {
+		isValid = true;
+	}
+	
+	public void setInvalid() {
+		isValid = false;
 	}
 }

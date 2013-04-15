@@ -4,10 +4,10 @@ import processing.core.*;
 
 public class DrawingInstance {
 	private static PApplet parentApplet;
+	private Frame frame;
 	private int heightOffset;
 	private PGraphics buf;
 	private Group drawing;
-	private String name;
 	private boolean isDirty;
 	
 	/*
@@ -16,12 +16,12 @@ public class DrawingInstance {
 	 * @param width
 	 * @param height
 	 */
-	public DrawingInstance(PApplet parent, int heightOffset) {
+	public DrawingInstance(PApplet parent, Frame frame, int heightOffset) {
 		this.parentApplet = parent;
+		this.frame = frame;
 		this.heightOffset = heightOffset;
 		this.buf = parent.createGraphics(parent.width, parent.height - heightOffset);
 		this.drawing = new Group(null, null);
-		this.name = "";
 		this.isDirty = true;
 		
 		/* Preload the buffer */
@@ -31,14 +31,10 @@ public class DrawingInstance {
 	}
 	
 	/*
-	 * Name getter and setter
+	 * Getters and setters
 	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getName() {
-		return this.name;
+	public void setDrawing(Group drawing) {
+		this.drawing = drawing;
 	}
 	
 	/*

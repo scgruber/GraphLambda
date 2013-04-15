@@ -94,7 +94,7 @@ public class TokenString {
 	        		this.next = new TokenString(nextLambdaString);
 	        	}
 	        }
-	    } else { // Normal token
+	    } else if (Character.isLetter(lambdaString.charAt(0))) { // Normal token
 	        this.val = "" + lambdaString.charAt(0);
 	        String nextLambdaString = lambdaString.substring(1);
 	        if (nextLambdaString.length() > 0) {
@@ -102,6 +102,8 @@ public class TokenString {
 	        	System.out.println(nextLambdaString);
 	        	this.next = new TokenString(nextLambdaString);
 	        }
+	    } else {
+	    	throw new TokenStringException("Starts with invalid character!");
 	    }
 	}
 	

@@ -1,5 +1,7 @@
 package com.scgruber.graphlambda;
 
+import java.util.ArrayList;
+
 import processing.core.*;
 
 public class GraphLambda extends PApplet {
@@ -8,14 +10,13 @@ public class GraphLambda extends PApplet {
 	 * Application variables
 	 */
 	PFont cantarell;
-	LambdaText activeText;
-	DrawingInstance activeDrawing;
+	ArrayList<Frame> frames;
+	Frame active;
 	Context uiContext;
 	
 	String[] demoStrings = {
-		"\\xy.x"	
+		"(\\xy.x)"	
 	};
-	int textHeight;
 	
 	/**
 	 * Calls the main processing presentation runtime
@@ -34,11 +35,9 @@ public class GraphLambda extends PApplet {
 		
 		cantarell = loadFont("Cantarell-Bold-48.vlw");
 		textFont(cantarell, 32);
-		textHeight = 40;
 		uiContext = Context.DRAWING;
 		
-		activeText = new LambdaText(this, demoStrings[0], textHeight);
-		activeDrawing = new DrawingInstance(this, textHeight);
+		active = new Frame(this, "NONAME", demoStrings[0]);
 	}
 	
 	/**
@@ -50,8 +49,7 @@ public class GraphLambda extends PApplet {
 		stroke(0);
 		
 		
-		activeText.display(uiContext == Context.TEXTFIELD);
-		activeDrawing.display(uiContext == Context.DRAWING);
+		active.display(uiContext);
 	}
 	
 	/* Interaction events */
@@ -63,10 +61,10 @@ public class GraphLambda extends PApplet {
 			case CODED:
 				switch(keyCode) {
 				case LEFT:
-					activeText.moveLeft();
+					active.moveTextLeft();
 					break;
 				case RIGHT:
-					activeText.moveRight();
+					active.moveTextRight();
 					break;
 				default:
 					break;
@@ -74,16 +72,15 @@ public class GraphLambda extends PApplet {
 				break;
 			case BACKSPACE:
 			case DELETE:
-				activeText.deleteChar();
+				active.deleteChar();
 				break;
 			case RETURN:
 			case ENTER:
 				uiContext = Context.DRAWING;
-				activeText.dirty();
-				activeDrawing.dirty();
+				active.dirty();
 				break;
 			default:
-				activeText.insertChar(key);
+				active.insertChar(key);
 			}
 			break;
 		case DRAWING:
@@ -91,8 +88,7 @@ public class GraphLambda extends PApplet {
 			case RETURN:
 			case ENTER:
 				uiContext = Context.TEXTFIELD;
-				activeText.dirty();
-				activeDrawing.dirty();
+				active.dirty();
 				break;
 			default:
 				break;
@@ -104,20 +100,11 @@ public class GraphLambda extends PApplet {
 	}
 	
 	public void mouseClicked() {
-		if (mouseY > textHeight) {
+		if (mouseY > 40) {
 			uiContext = Context.DRAWING;
 		} else {
 			uiContext = Context.TEXTFIELD;
 		}
-		activeText.dirty();
-		activeDrawing.dirty();
+		active.dirty();
 	}
-	
-	/*
-	 * Enumerated possible contexts for user interaction
-	 */
-	private enum Context {
-		TEXTFIELD, DRAWING, TOOLBAR
-	}
-
 }
